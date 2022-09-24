@@ -42,11 +42,15 @@ public class Program3 extends LinearOpMode {
             double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
             double lateral =  gamepad1.left_stick_x;
             double yaw     =  gamepad1.right_stick_x;
-            if(triang==true && oldtriang == false && triang_angle == 0) {
+            if(triang==true && oldtriang == false && triang_angle != 0) {
                 servo.setPosition(0);
+                triang_angle = 0;
             }
-            if(triang==false && oldtriang == true && triang_angle == 0) {
-                servo.setPosition(0.25);
+            else {
+                if (triang == true && oldtriang == false && triang_angle != 0.25) {
+                    servo.setPosition(0.25);
+                    triang_angle = 0.25;
+                }
             }
             double leftFrontPower  = axial + lateral + yaw;
             double rightFrontPower = axial - lateral - yaw;
