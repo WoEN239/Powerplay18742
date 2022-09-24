@@ -55,5 +55,9 @@ public class Program_Avtonom2 extends LinearOpMode {
             leftBackDrive.setPower(e * k);
             rightBackDrive.setPower(e * k);
         }
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
     }
 }
