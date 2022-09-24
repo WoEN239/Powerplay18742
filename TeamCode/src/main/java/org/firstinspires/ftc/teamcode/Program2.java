@@ -32,16 +32,14 @@ public class Program2  extends LinearOpMode {
         while (opModeIsActive()) {
             boolean triang = gamepad1.square;
             double max;
-            if(triang == true && oldtriang == false && triang_angle == 0)
-            {
+            if(triang == true && oldtriang == false && triang_angle != 0) {
                 servo.setPosition(0);
                 triang_angle = 0;
             }
-            else{
-                if (triang == true && oldtriang == false && triang_angle != 0.25)
-                {
-                    servo.setPosition(0.25);
-                    triang_angle = 0.25;
+            else {
+                if (triang == true && oldtriang == false && triang_angle != 0.25) {
+                    servo.setPosition(1);
+                    triang_angle = 1;
                 }
             }
             double axial   = -gamepad1.left_stick_y;
