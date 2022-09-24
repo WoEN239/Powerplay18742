@@ -1,15 +1,10 @@
 package org.firstinspires.ftc.teamcode;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp
 public class Program2  extends LinearOpMode {
-
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
@@ -37,10 +32,18 @@ public class Program2  extends LinearOpMode {
         while (opModeIsActive()) {
             boolean triang = gamepad1.square;
             double max;
-            if(triang == true && oldtriang == false && triang_angle == 0);
+            if(triang == true && oldtriang == false && triang_angle == 0)
+            {
                 servo.setPosition(0);
-            if(triang == false && oldtriang == true && triang_angle == 0);
-                servo.setPosition(0);
+                triang_angle = 0;
+            }
+            else{
+                if (triang == true && oldtriang == false && triang_angle != 0.25)
+                {
+                    servo.setPosition(0.25);
+                    triang_angle = 0.25;
+                }
+            }
             double axial   = -gamepad1.left_stick_y;
             double lateral =  gamepad1.left_stick_x;
             double yaw     =  gamepad1.right_stick_x;
