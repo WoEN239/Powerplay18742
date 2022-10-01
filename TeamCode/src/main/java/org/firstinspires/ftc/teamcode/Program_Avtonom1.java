@@ -1,29 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 @Autonomous
-//@Autonomous(name="Robot: Auto Drive By Encoder", group="Robot")
 public class Program_Avtonom1 extends LinearOpMode {
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
 
-    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.6;
-    static final double     TURN_SPEED              = 0.5;
-
     double crr = 24 * 20 / (9.8 * PI);
-
 
     @Override
     public void runOpMode() {
@@ -46,78 +35,119 @@ public class Program_Avtonom1 extends LinearOpMode {
         leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         waitForStart();
-        //Left(-50);
-        Left(10);
 
+        //D(50);
+        //sleep(100);
+        //D(-50);
+        //sleep(100);
+        RL(50);
+        sleep(100);
+        RL(-50);
+        sleep(100);
+        B(50);
+        sleep(100);
+        B(-50);
+        sleep(100);
+        M(50);
+        sleep(100);
+        M(-50);
+        sleep(100);
     }
 
-    void Left(double y) {
-        double llfd = leftFrontDrive.getCurrentPosition();
-        double llbd = leftBackDrive.getCurrentPosition();
-        double lrfd = rightFrontDrive.getCurrentPosition();
-        double lrbd = rightBackDrive.getCurrentPosition();
+    void RL(double x) {
+        double lfd = leftFrontDrive.getCurrentPosition();
+        double lbd = leftBackDrive.getCurrentPosition();
+        double rfd = rightFrontDrive.getCurrentPosition();
+        double rbd = rightBackDrive.getCurrentPosition();
 
-        double motors2 = (llfd + llbd + lrfd + lrbd) / 4;
-        double e2 = y * crr - motors2;
-        while ((abs(e2)) > 1 && opModeIsActive()) {
-            llfd = leftFrontDrive.getCurrentPosition();
-            llbd = leftBackDrive.getCurrentPosition();
-            lrfd = rightFrontDrive.getCurrentPosition();
-            lrbd = rightBackDrive.getCurrentPosition();
+        double motors = (lfd + lbd + rfd + rbd) / 4;
+        double e = x * crr - motors;
+        while ((abs(e)) > 100 && opModeIsActive()) {
+            lfd = leftFrontDrive.getCurrentPosition();
+            lbd = leftBackDrive.getCurrentPosition();
+            rfd = rightFrontDrive.getCurrentPosition();
+            rbd = rightBackDrive.getCurrentPosition();
 
-            motors2 = (llfd + llbd + lrfd + lrbd) / 4;
-            e2 = y * crr - motors2;
+            motors = (-lfd - lbd + rfd + rbd) / 4;
+            e = x * crr - motors;
 
-            double k = 0.00001;
-
-            leftFrontDrive.setPower(-e2 * k);
-            rightFrontDrive.setPower(e2 * k);
-            leftBackDrive.setPower(-e2 * k);
-            rightBackDrive.setPower(e2 * k);
-            telemetry.addData("llfd", llfd);
-            telemetry.addData("llbd", llbd);
-            telemetry.addData("lrfd", lrfd);
-            telemetry.addData("lrbd", lrbd);
-            telemetry.addData("e2", e2);
-            telemetry.update();
-
-        }
-    }
-
-    void Bok(double z) {
-        double blfd = leftFrontDrive.getCurrentPosition();
-        double blbd = leftBackDrive.getCurrentPosition();
-        double brfd = rightFrontDrive.getCurrentPosition();
-        double brbd = rightBackDrive.getCurrentPosition();
-
-        double motors2 = (blfd + blbd + brfd + brbd) / 4;
-        double e = z * crr - motors2;
-        while ((abs(e)) > 1 && opModeIsActive()) {
-            blfd = leftFrontDrive.getCurrentPosition();
-            blbd = leftBackDrive.getCurrentPosition();
-            brfd = rightFrontDrive.getCurrentPosition();
-            brbd = rightBackDrive.getCurrentPosition();
-
-            motors2 = (blfd + blbd + brfd + brbd) / 4;
-            e = z * crr - motors2;
-
-            double k = 0.00001;
+            double k = 0.001;
 
             leftFrontDrive.setPower(-e * k);
             rightFrontDrive.setPower(e * k);
             leftBackDrive.setPower(-e * k);
             rightBackDrive.setPower(e * k);
-            telemetry.addData("blfd", blfd);
-            telemetry.addData("blbd", blbd);
-            telemetry.addData("brfd", brfd);
-            telemetry.addData("brbd", brbd);
+            telemetry.addData("lfd", lfd);
+            telemetry.addData("lbd", lbd);
+            telemetry.addData("rfd", rfd);
+            telemetry.addData("rbd", rbd);
             telemetry.addData("e", e);
             telemetry.update();
 
         }
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
+
+        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-    void Move(double x) {
+
+    void B(double x) {
+        double lfd = leftFrontDrive.getCurrentPosition();
+        double lbd = leftBackDrive.getCurrentPosition();
+        double rfd = rightFrontDrive.getCurrentPosition();
+        double rbd = rightBackDrive.getCurrentPosition();
+
+        double motors = (lfd + lbd + rfd + rbd) / 4;
+        double e = x * crr - motors;
+        while ((abs(e)) > 100 && opModeIsActive()) {
+            lfd = leftFrontDrive.getCurrentPosition();
+            lbd = leftBackDrive.getCurrentPosition();
+            rfd = rightFrontDrive.getCurrentPosition();
+            rbd = rightBackDrive.getCurrentPosition();
+
+            motors = (-lfd + lbd + rfd - rbd) / 4;
+            e = x * crr - motors;
+
+            double k = 0.001;
+
+            leftFrontDrive.setPower(-e * k);
+            rightFrontDrive.setPower(e * k);
+            leftBackDrive.setPower(e * k);
+            rightBackDrive.setPower(-e * k);
+            telemetry.addData("lfd", lfd);
+            telemetry.addData("lbd", lbd);
+            telemetry.addData("rfd", rfd);
+            telemetry.addData("rbd", rbd);
+            telemetry.addData("e", e);
+            telemetry.update();
+
+        }
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
+
+        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+    void M(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();
@@ -134,13 +164,16 @@ public class Program_Avtonom1 extends LinearOpMode {
             motors = (lfd + lbd + rfd + rbd) / 4;
             e = x * crr - motors;
 
-            double k = 0.00001;
+            double k = 0.001;
 
             leftFrontDrive.setPower(e * k);
             rightFrontDrive.setPower(e * k);
             leftBackDrive.setPower(e * k);
             rightBackDrive.setPower(e * k);
-            telemetry.addData("loop count", motors);
+            telemetry.addData("lfd", lfd);
+            telemetry.addData("lbd", lbd);
+            telemetry.addData("rfd", rfd);
+            telemetry.addData("rbd", rbd);
             telemetry.addData("e", e);
             telemetry.update();
 
@@ -149,5 +182,60 @@ public class Program_Avtonom1 extends LinearOpMode {
         rightFrontDrive.setPower(0);
         leftBackDrive.setPower(0);
         rightBackDrive.setPower(0);
+
+        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+    void D(double x) {
+        double lfd = leftFrontDrive.getCurrentPosition();
+        double lbd = leftBackDrive.getCurrentPosition();
+        double rfd = rightFrontDrive.getCurrentPosition();
+        double rbd = rightBackDrive.getCurrentPosition();
+
+        double motors = (lfd + lbd + rfd + rbd) / 4;
+        double e = x * crr - motors;
+        while ((abs(e)) > 100 && opModeIsActive()) {
+            lfd = leftFrontDrive.getCurrentPosition();
+            lbd = leftBackDrive.getCurrentPosition();
+            rfd = rightFrontDrive.getCurrentPosition();
+            rbd = rightBackDrive.getCurrentPosition();
+
+            motors = (lfd + lbd + rfd + rbd) / 4;
+            e = x * crr - motors;
+
+            double k = 0.001;
+            double k2 = 2;
+
+            leftFrontDrive.setPower(e * k * k2);
+            rightFrontDrive.setPower(e * k);
+            leftBackDrive.setPower(e * k);
+            rightBackDrive.setPower(e * k * k2);
+            telemetry.addData("lfd", lfd);
+            telemetry.addData("lbd", lbd);
+            telemetry.addData("rfd", rfd);
+            telemetry.addData("rbd", rbd);
+            telemetry.addData("e", e);
+            telemetry.update();
+
+        }
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
+
+        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 }
