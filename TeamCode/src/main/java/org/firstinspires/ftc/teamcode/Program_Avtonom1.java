@@ -38,25 +38,24 @@ public class Program_Avtonom1 extends LinearOpMode {
 
         waitForStart();
 
-        //D(50);
-        //sleep(100);
-        //D(-50);
-        //sleep(100);
-        RL(50);
+        Diogonal(50);
         sleep(100);
-        RL(-50);
+        Diogonal(-50);
+        /*sleep(100);
+        Turn(50);
         sleep(100);
-        B(50);
+        Turn(-50);
         sleep(100);
-        B(-50);
+        LeftRight(50);
         sleep(100);
-        M(50);
+        LeftRight(-50);
         sleep(100);
-        M(-50);
+        ForwardBack(50);
         sleep(100);
+        ForwardBack(-50);
+        sleep(100);*/
     }
-
-    void RL(double x) {
+    void Turn(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();
@@ -101,8 +100,7 @@ public class Program_Avtonom1 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
-    void B(double x) {
+    void LeftRight(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();
@@ -147,7 +145,7 @@ public class Program_Avtonom1 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-    void M(double x) {
+    void ForwardBack(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();
@@ -192,30 +190,34 @@ public class Program_Avtonom1 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-    void D(double x) {
+    void Diogonal(double x, double y) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();
         double rbd = rightBackDrive.getCurrentPosition();
 
-        double motors = (lfd + lbd + rfd + rbd) / 4;
-        double e = x * crr - motors;
-        while ((abs(e)) > 100 && opModeIsActive()) {
+        double motorsX = (lfd + lbd + rfd + rbd) / 4;
+        double motorsY = (lfd + lbd + rfd + rbd) / 4;
+        double ex = x * crr - motorsX;
+        double ey = y * crr - motorsY;
+        while ((abs(ex)) > 100 && ((abs(ey)) > 100 && opModeIsActive()) {
             lfd = leftFrontDrive.getCurrentPosition();
             lbd = leftBackDrive.getCurrentPosition();
             rfd = rightFrontDrive.getCurrentPosition();
             rbd = rightBackDrive.getCurrentPosition();
 
-            motors = (lfd + lbd + rfd + rbd) / 4;
-            e = x * crr - motors;
+            motorsX = (lfd + lbd + rfd + rbd) / 4;
+            motorsY = (lfd - lbd + rfd - rbd) / 4;
+            ex = ex * crr - motorsX;
+            ey = ey * crr - motorsY;
 
-            double k = 0.001;
-            double k2 = 2;
+            double kx = 0.0001;
+            double ky = 0.0001;
 
-            leftFrontDrive.setPower(e * k * k2);
-            rightFrontDrive.setPower(e * k);
-            leftBackDrive.setPower(e * k);
-            rightBackDrive.setPower(e * k * k2);
+            leftFrontDrive.setPower(ex*kx + ey * ky);
+            rightFrontDrive.setPower(ex*kx + ey * ky);
+            leftBackDrive.setPower(ex*kx + ey * ky);
+            rightBackDrive.setPower(ex*kx + ey * ky);
             telemetry.addData("lfd", lfd);
             telemetry.addData("lbd", lbd);
             telemetry.addData("rfd", rfd);
