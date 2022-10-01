@@ -49,6 +49,7 @@ public class Program_Avtonom1 extends LinearOpMode {
         waitForStart();
         //Left(-50);
         Left(10);
+
     }
 
     void Left(double y) {
@@ -83,6 +84,39 @@ public class Program_Avtonom1 extends LinearOpMode {
 
         }
     }
+
+    void Bok(double z) {
+        double blfd = leftFrontDrive.getCurrentPosition();
+        double blbd = leftBackDrive.getCurrentPosition();
+        double brfd = rightFrontDrive.getCurrentPosition();
+        double brbd = rightBackDrive.getCurrentPosition();
+
+        double motors2 = (blfd + blbd + brfd + brbd) / 4;
+        double e = z * crr - motors2;
+        while ((abs(e)) > 1 && opModeIsActive()) {
+            blfd = leftFrontDrive.getCurrentPosition();
+            blbd = leftBackDrive.getCurrentPosition();
+            brfd = rightFrontDrive.getCurrentPosition();
+            brbd = rightBackDrive.getCurrentPosition();
+
+            motors2 = (blfd + blbd + brfd + brbd) / 4;
+            e = z * crr - motors2;
+
+            double k = 0.00001;
+
+            leftFrontDrive.setPower(-e * k);
+            rightFrontDrive.setPower(e * k);
+            leftBackDrive.setPower(-e * k);
+            rightBackDrive.setPower(e * k);
+            telemetry.addData("blfd", blfd);
+            telemetry.addData("blbd", blbd);
+            telemetry.addData("brfd", brfd);
+            telemetry.addData("brbd", brbd);
+            telemetry.addData("e", e);
+            telemetry.update();
+
+        }
+    }
     void Move(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
@@ -100,7 +134,7 @@ public class Program_Avtonom1 extends LinearOpMode {
             motors = (lfd + lbd + rfd + rbd) / 4;
             e = x * crr - motors;
 
-            double k = 0.01;
+            double k = 0.00001;
 
             leftFrontDrive.setPower(e * k);
             rightFrontDrive.setPower(e * k);
