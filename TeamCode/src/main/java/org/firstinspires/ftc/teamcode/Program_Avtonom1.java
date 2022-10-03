@@ -38,9 +38,9 @@ public class Program_Avtonom1 extends LinearOpMode {
 
         waitForStart();
 
-        Diogonal(50);
+        Diogonal(50, 70);
         sleep(100);
-        Diogonal(-50);
+        Diogonal(-50, -70);
         /*sleep(100);
         Turn(50);
         sleep(100);
@@ -197,7 +197,7 @@ public class Program_Avtonom1 extends LinearOpMode {
         double rbd = rightBackDrive.getCurrentPosition();
 
         double motorsX = (lfd + lbd + rfd + rbd) / 4;
-        double motorsY = (lfd + lbd + rfd + rbd) / 4;
+        double motorsY = (lfd - lbd + rfd - rbd) / 4;
         double ex = x * crr - motorsX;
         double ey = y * crr - motorsY;
         while ((abs(ex)) > 100 && ((abs(ey)) > 100 && opModeIsActive()) {
@@ -215,14 +215,13 @@ public class Program_Avtonom1 extends LinearOpMode {
             double ky = 0.0001;
 
             leftFrontDrive.setPower(ex*kx + ey * ky);
-            rightFrontDrive.setPower(ex*kx + ey * ky);
+            rightFrontDrive.setPower(ex*kx - ey * ky);
             leftBackDrive.setPower(ex*kx + ey * ky);
-            rightBackDrive.setPower(ex*kx + ey * ky);
+            rightBackDrive.setPower(ex*kx - ey * ky);
             telemetry.addData("lfd", lfd);
             telemetry.addData("lbd", lbd);
             telemetry.addData("rfd", rfd);
             telemetry.addData("rbd", rbd);
-            telemetry.addData("e", e);
             telemetry.update();
 
         }
