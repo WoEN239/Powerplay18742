@@ -41,7 +41,7 @@ public class Program_Avtonom1 extends LinearOpMode {
         Diogonal(50, 70);
         sleep(100);
         Diogonal(-50, -70);
-        /*sleep(100);
+        sleep(100);
         Turn(50);
         sleep(100);
         Turn(-50);
@@ -53,7 +53,7 @@ public class Program_Avtonom1 extends LinearOpMode {
         ForwardBack(50);
         sleep(100);
         ForwardBack(-50);
-        sleep(100);*/
+        sleep(100);
     }
     void Turn(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
