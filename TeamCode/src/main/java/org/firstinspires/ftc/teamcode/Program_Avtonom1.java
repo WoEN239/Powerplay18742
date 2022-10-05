@@ -7,6 +7,9 @@ import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 @Autonomous
 public class Program_Avtonom1 extends LinearOpMode {
+    private PidRegulator PIDX=new PidRegulator(0.025,0.0000001,0.001);
+    private PidRegulator PIDY=new PidRegulator(0.025,0.0000001,0.001);
+    private PidRegulator PIDZ=new PidRegulator(0.025,0.0000001,0.001);
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
@@ -188,11 +191,15 @@ public class Program_Avtonom1 extends LinearOpMode {
         double motorsY = (-lfd + lbd + rfd - rbd) / 4;
         double motorsZ = (-lfd - lbd + rfd + rbd) / 4;
 
-        double ex = x * crr - motorsX;
-        double ey = y * crr - motorsY;
-        double ez = z * crr - motorsZ;
+        PIDX.target = x * crr;
+        PIDY.target = y * crr;
+        PIDZ.target = z * crr ;
 
-        while ((abs(ex)) > 100 && (abs(ey)) > 100 && (abs(ez)) > 100 && opModeIsActive()) {
+        PIDX.update(motorsX);
+        PIDY.update(motorsY);
+        PIDZ.update(motorsZ);
+
+        while ((abs( PIDX.err)) > 100 && (abs(PIDY.err)) > 100 && (abs(PIDZ.err)) > 100 && opModeIsActive()) {
             lfd = leftFrontDrive.getCurrentPosition();
             lbd = leftBackDrive.getCurrentPosition();
             rfd = rightFrontDrive.getCurrentPosition();
@@ -201,19 +208,18 @@ public class Program_Avtonom1 extends LinearOpMode {
             motorsX = (lfd + lbd + rfd + rbd) / 4;
             motorsY = (-lfd + lbd + rfd - rbd) / 4;
             motorsZ = (-lfd - lbd + rfd + rbd) / 4;
-
-            ex = x * crr - motorsX;
-            ey = y * crr - motorsY;
-            ez = z * crr - motorsZ;
+            double powerx = PIDX.update(motorsX);
+            double powery =  PIDY.update(motorsY);
+            double powerz = PIDZ.update(motorsZ);
 
             double kx = 0.001;
             double ky = 0.001;
             double kz = 0.01;
 
-            leftFrontDrive.setPower(ex * kx - ey * ky - ez * kz);
-            rightFrontDrive.setPower(ex * kx + ey * ky - ez * kz);
-            leftBackDrive.setPower(ex * kx + ey * ky + ez * kz);
-            rightBackDrive.setPower(ex * kx - ey * ky + ez * kz);
+            leftFrontDrive.setPower(powerx - powery - powerz);
+            rightFrontDrive.setPower(powerx + powery - powerz);
+            leftBackDrive.setPower(powerx + powery - powerz);
+            rightBackDrive.setPower(powerx - powery + powerz);
             telemetry.addData("lfd", lfd);
             telemetry.addData("lbd", lbd);
             telemetry.addData("rfd", rfd);
