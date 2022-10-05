@@ -224,8 +224,6 @@ public class Program_Avtonom1 extends LinearOpMode {
             telemetry.addData("lbd", lbd);
             telemetry.addData("rfd", rfd);
             telemetry.addData("rbd", rbd);
-            telemetry.addData("ex", ex);
-            telemetry.addData("ey", ey);
             telemetry.update();
 
         }
