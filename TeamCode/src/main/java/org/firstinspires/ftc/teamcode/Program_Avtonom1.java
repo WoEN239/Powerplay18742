@@ -38,22 +38,10 @@ public class Program_Avtonom1 extends LinearOpMode {
 
         waitForStart();
 
-        Diogonal(50, 70);
+        Diogonal(50, 50, 50);
         sleep(100);
-        Diogonal(-50, -70);
-        sleep(100);
-        Turn(50);
-        sleep(100);
-        Turn(-50);
-        sleep(100);
-        LeftRight(50);
-        sleep(100);
-        LeftRight(-50);
-        sleep(100);
-        ForwardBack(50);
-        sleep(100);
-        ForwardBack(-50);
-        sleep(100);
+        Diogonal(-50, -50, 50);
+
     }
     void Turn(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
@@ -190,16 +178,20 @@ public class Program_Avtonom1 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-    void Diogonal(double x, double y) {
+    void Diogonal(double x, double y, double z) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();
         double rbd = rightBackDrive.getCurrentPosition();
 
         double motorsX = (lfd + lbd + rfd + rbd) / 4;
-        double motorsY = (lfd - lbd + rfd - rbd) / 4;
+        double motorsY = (-lfd + lbd + rfd - rbd) / 4;
+        double motorsZ = (-lfd - lbd + rfd + rbd) / 4;
+
         double ex = x * crr - motorsX;
         double ey = y * crr - motorsY;
+        double ez = z * crr - motorsZ;
+
         while ((abs(ex)) > 100 && ((abs(ey)) > 100 && opModeIsActive())) {
             lfd = leftFrontDrive.getCurrentPosition();
             lbd = leftBackDrive.getCurrentPosition();
@@ -207,21 +199,27 @@ public class Program_Avtonom1 extends LinearOpMode {
             rbd = rightBackDrive.getCurrentPosition();
 
             motorsX = (lfd + lbd + rfd + rbd) / 4;
-            motorsY = (lfd - lbd + rfd - rbd) / 4;
-            ex = ex * crr - motorsX;
-            ey = ey * crr - motorsY;
+            motorsY = (-lfd + lbd + rfd - rbd) / 4;
+            motorsZ = (-lfd - lbd + rfd + rbd) / 4;
 
-            double kx = 0.0001;
-            double ky = 0.0001;
+            ex = x * crr - motorsX;
+            ey = y * crr - motorsY;
+            ez = z * crr - motorsZ;
 
-            leftFrontDrive.setPower(ex*kx + ey * ky);
-            rightFrontDrive.setPower(ex*kx - ey * ky);
-            leftBackDrive.setPower(ex*kx + ey * ky);
-            rightBackDrive.setPower(ex*kx - ey * ky);
+            double kx = 0.001;
+            double ky = 0.001;
+            double kz = 0.01;
+
+            leftFrontDrive.setPower(ex * kx - ey * ky - ez * kz);
+            rightFrontDrive.setPower(ex * kx + ey * ky - ez * kz);
+            leftBackDrive.setPower(ex * kx + ey * ky + ez * kz);
+            rightBackDrive.setPower(ex * kx - ey * ky + ez * kz);
             telemetry.addData("lfd", lfd);
             telemetry.addData("lbd", lbd);
             telemetry.addData("rfd", rfd);
             telemetry.addData("rbd", rbd);
+            telemetry.addData("ex", ex);
+            telemetry.addData("ey", ey);
             telemetry.update();
 
         }

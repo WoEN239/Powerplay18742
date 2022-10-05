@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+/*package org.firstinspires.ftc.teamcode;
 
 public class PidRegulator {
     double kP = 0;
@@ -23,4 +23,4 @@ public class PidRegulator {
         double ui+=(err*kI) ;
         double ud=err*kD;
     }
-}
+}*/
