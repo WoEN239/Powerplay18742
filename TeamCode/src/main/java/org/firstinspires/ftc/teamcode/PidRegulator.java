@@ -10,6 +10,7 @@ public class PidRegulator {
     double target = 0;
     double errold;
     double told;
+    double err;
 
     public PidRegulator(double p, double i, double d) {
         kP = p;
@@ -20,16 +21,16 @@ public class PidRegulator {
 
     public double update(double sensorValue) {
 
-        double time=System.currentTimeMillis() / 1000.0;
-        double err = target - sensorValue;
+        double time = System.currentTimeMillis() / 1000.0;
+        err = target - sensorValue;
         double up = err * kP;
-        ui+=(err * kI)*(time-told);
-        if(abs(ui) > 1) {
-            ui=1;
+        ui += (err * kI) * (time - told);
+        if (abs(ui) > 1) {
+            ui = 1;
         }
-        double ud = (err-errold) * kD/(time-told);
-        errold=err;
-        told=time;
+        double ud = (err - errold) * kD / (time - told);
+        errold = err;
+        told = time;
         return up + ud + ui;
 
     }
