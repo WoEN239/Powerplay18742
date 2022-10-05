@@ -200,7 +200,7 @@ public class Program_Avtonom1 extends LinearOpMode {
         double motorsY = (lfd - lbd + rfd - rbd) / 4;
         double ex = x * crr - motorsX;
         double ey = y * crr - motorsY;
-        while ((abs(ex)) > 100 && ((abs(ey)) > 100 && opModeIsActive()) {
+        while ((abs(ex)) > 100 && ((abs(ey)) > 100 && opModeIsActive())) {
             lfd = leftFrontDrive.getCurrentPosition();
             lbd = leftBackDrive.getCurrentPosition();
             rfd = rightFrontDrive.getCurrentPosition();
