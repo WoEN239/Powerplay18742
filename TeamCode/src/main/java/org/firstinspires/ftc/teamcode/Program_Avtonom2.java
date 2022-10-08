@@ -37,7 +37,7 @@ public class Program_Avtonom2 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         waitForStart();
         TurnGuro(85, 0.15);
-        TurnGuro(85, 0.15);
+        TurnGuro(-85, -0.15);
     }
     void Turn(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
