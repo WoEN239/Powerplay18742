@@ -41,9 +41,9 @@ public class Program_Avtonom1 extends LinearOpMode {
 
         waitForStart();
 
-        Diogonal(50, 50, 50);
+        LeftRight(50);
         sleep(100);
-        Diogonal(-50, -50, 50);
+        LeftRight(50);
 
     }
     void Turn(double x) {
