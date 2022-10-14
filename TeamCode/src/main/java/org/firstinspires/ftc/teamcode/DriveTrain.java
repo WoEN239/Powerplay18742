@@ -87,7 +87,7 @@ public class DriveTrain {
 
             left_front_drive.setPower(powerx - powery - powerz);
             left_back_drive.setPower(powerx + powery - powerz);
-            right_front_drive.setPower(powerx + powery - powerz);
+            right_front_drive.setPower(powerx + powery + powerz);
             right_back_drive.setPower(powerx - powery + powerz);
             told = t;
 
