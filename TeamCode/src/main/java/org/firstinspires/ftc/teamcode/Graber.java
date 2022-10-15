@@ -11,8 +11,15 @@ public class Graber {
     }
 
     void Target_Graber(boolean triang) {
+
         boolean oldtriang = false;
         double triang_angle = 0;
+        double angel=0;
+        if (triang==true) {
+         angel=0.25;
+        }
+        double k=0.5;
+        while()
         if (triang == true && oldtriang == false && triang_angle != 0) {
             servo.setPosition(0);
             triang_angle = 0;
