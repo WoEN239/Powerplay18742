@@ -38,7 +38,7 @@ public class Program3 extends LinearOpMode {
         double triang_angle = 0;
         while (opModeIsActive()) {
             boolean triang =  gamepad1.triangle;
-            boolean triang =  gamepad1.triangle;
+           // boolean triang =  gamepad1.triangle;
             double max;
             double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
             double lateral =  gamepad1.left_stick_x;

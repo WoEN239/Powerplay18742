@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp
 public class Program2  extends LinearOpMode {
@@ -15,7 +16,7 @@ public class Program2  extends LinearOpMode {
     Servo servo;
     boolean oldsquare = false;
     double square_angle = 0;
-    double circle_angle = 0;
+    double circle_angle = 1;
     boolean oldcircle = false;
     boolean oldtriangle = false;
     double triangle_angle = 0;
@@ -35,9 +36,9 @@ public class Program2  extends LinearOpMode {
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        motor1.setDirection(DcMotor.Direction.REVERSE);
-        motor2.setDirection(DcMotor.Direction.REVERSE);
-        svet.setDirection(DcMotor.Direction.REVERSE);
+        motor1.setDirection(DcMotor.Direction.FORWARD);
+        motor2.setDirection(DcMotor.Direction.FORWARD);
+        svet.setDirection(DcMotor.Direction.FORWARD);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -49,29 +50,36 @@ public class Program2  extends LinearOpMode {
                 square_angle = 0;
             } else {
                 if (square == true && oldsquare == false && square_angle != 0.25) {
-                    servo.setPosition(1);
+                    servo.setPosition(0.3);
                     square_angle = 1;
                 }
             }
             boolean circle = gamepad1.circle;
-            if (circle == true && oldcircle == false && circle_angle != 0) {
-                leftFrontDrive.setPower(0);
+            if (circle == true && circle_angle == 1) {
+                svet.setPower(1);
                 circle_angle = 0;
-            } else {
-                if (circle == true && oldcircle == false && circle_angle != 0.25) {
-                    leftFrontDrive.setPower(0);
-                    circle_angle = 1;
-                }
+            }
+            if (circle == false && circle_angle == 0) {
+                svet.setPower(0);
+                circle_angle = 1;
             }
             boolean triangle = gamepad1.triangle;
-            if (triangle == true && oldtriangle == false && triangle_angle != 0) {
-                leftFrontDrive.setPower(0);
-                triangle_angle = 0;
-            } else {
-                if (triangle == true && oldtriangle == false && triangle_angle != 0.25) {
-                    leftFrontDrive.setPower(0);
-                    triangle_angle = 1;
-                }
+            if (triangle == true) {
+                motor1.setPower(1);
+                motor2.setPower(1);
+            }
+            if (triangle == false) {
+                motor1.setPower(0);
+                motor2.setPower(0);
+            }
+            boolean cross = gamepad1.cross;
+            if (cross == true) {
+                motor1.setPower(-1);
+                motor2.setPower(-1);
+            }
+            if (cross == false) {
+                motor1.setPower(0);
+                motor2.setPower(0);
             }
             double axial = -gamepad1.left_stick_y;
             double lateral = gamepad1.left_stick_x;
