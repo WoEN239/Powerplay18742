@@ -25,7 +25,6 @@ public class Camera {
     double tagsize = 0.166;
 
     int ID_TAG_OF_INTEREST0 = 0;
-    int ID_TAG_OF_INTEREST1 = 1;
     int ID_TAG_OF_INTEREST6 = 6;
 
     AprilTagDetection tagOfInterest = null;
@@ -56,7 +55,7 @@ public class Camera {
             boolean tagFound = false;
 
             for (AprilTagDetection tag : currentDetections) {
-                if (tag.id == ID_TAG_OF_INTEREST0 || tag.id == ID_TAG_OF_INTEREST1 || tag.id == ID_TAG_OF_INTEREST6) {
+                if (tag.id == ID_TAG_OF_INTEREST0  || tag.id == ID_TAG_OF_INTEREST6) {
                     tagOfInterest = tag;
                     tagFound = true;
                     break;
@@ -68,5 +67,9 @@ public class Camera {
             return -1;
         else
             return tagOfInterest.id;
+    }
+
+    void stopcamera() {
+        camera.closeCameraDevice();
     }
 }

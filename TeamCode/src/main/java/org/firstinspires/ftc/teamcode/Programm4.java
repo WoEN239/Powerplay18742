@@ -45,12 +45,22 @@ public class Programm4  extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             graber = new Graber(hardwareMap);
+
+            svet.setPower(0.25);
+            sleep(10);
+            svet.setPower(0.50);
+            sleep(10);
+            svet.setPower(0.75);
+            sleep(10);
+            svet.setPower(1);
             boolean square = gamepad1.square;
-            if (square == true && oldsquare == false && square_angle != 0) {
-                 graber.Target_Graber(true);
+            if (square == true && oldsquare == false && square_angle != 0.2) {
+                servo.setPosition(0.2);
+                square_angle = 0;
             } else {
-                if (square == true && oldsquare == false && square_angle != 0.25) {
-                   graber.Target_Graber(false);
+                if (square == true && oldsquare == false && square_angle != 0.5) {
+                    servo.setPosition(0.5);
+                    square_angle = 0.5;
                 }
             }
             boolean circle = gamepad1.circle;

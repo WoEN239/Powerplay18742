@@ -19,8 +19,8 @@ public class DriveTrain {
     private LinearOpMode opMode;
 
     public DriveTrain(HardwareMap hardwareMap, LinearOpMode _opMode) {
-
-        left_front_drive = hardwareMap.dcMotor.get("leftfront_drive");
+        opMode = _opMode;
+        left_front_drive = hardwareMap.dcMotor.get("left_front_drive");
         left_back_drive = hardwareMap.dcMotor.get("left_back_drive");
         right_front_drive = hardwareMap.dcMotor.get("right_front_drive");
         right_back_drive = hardwareMap.dcMotor.get("right_back_drive");
@@ -74,7 +74,7 @@ public class DriveTrain {
         double t1 = System.currentTimeMillis() / 1000.0;
         double t = 0;
         double tr = t - told;
-        while (((abs(PIDX.err)) > 100 || (abs(PIDY.err)) > 100 ||  (abs(PIDZ.err)) > 100) && tr < 5000 && opMode.opModeIsActive()) {
+        while (((abs(PIDX.err)) > 100 || (abs(PIDY.err)) > 100 || (abs(PIDZ.err)) > 100) && tr < 5000 && opMode.opModeIsActive()) {
             t = System.currentTimeMillis() / 1000.0;
             tr = t - t1;
             lfd = left_front_drive.getCurrentPosition();

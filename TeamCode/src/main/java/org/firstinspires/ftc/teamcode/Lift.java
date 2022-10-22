@@ -12,8 +12,8 @@ public class Lift {
     private DcMotor motor1;
     private DcMotor motor2;
     private DcMotor svet;
-    private PidRegulator PIDZL1 = new PidRegulator(10.125, 0.0000001, 0.001);
-    private PidRegulator PIDZL2 = new PidRegulator(10.125, 0.0000001, 0.001);
+    private PidRegulator PIDZL1 = new PidRegulator(5.125, 0, 0);
+    private PidRegulator PIDZL2 = new PidRegulator(5.125, 0, 0);
     double crr = 24 * 20 / (2.5 * PI);
     double told;
 
@@ -21,11 +21,11 @@ public class Lift {
 
     public Lift(HardwareMap hardwareMap, LinearOpMode _opMode) {
         opMode = _opMode;
-        motor1 = hardwareMap.dcMotor.get("Lift1");
-        motor2 = hardwareMap.dcMotor.get("Lift2");
-        svet = hardwareMap.dcMotor.get("color1");
+        motor1 = hardwareMap.dcMotor.get("motor1");
+        motor2 = hardwareMap.dcMotor.get("motor2");
+        svet = hardwareMap.dcMotor.get("svet");
         motor1.setDirection(DcMotorSimple.Direction.FORWARD);
-        motor2.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor2.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     void reset() {

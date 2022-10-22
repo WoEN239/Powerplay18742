@@ -18,13 +18,13 @@ public class Graber {
         if (triang == true) {
             angel = 0.25;
         }
-        if (triang == true && oldtriang == false && triang_angle != 0) {
-            servo.setPosition(0);
-            triang_angle = 0;
+        if (triang == true && oldtriang == false && triang_angle != 0.13) {
+            servo.setPosition(0.13);
+            triang_angle = 0.13;
         } else {
-            if (triang == true && oldtriang == false && triang_angle != 0.25) {
-                servo.setPosition(0.25);
-                triang_angle = 0.25;
+            if (triang == true && oldtriang == false && triang_angle != 0.5) {
+                servo.setPosition(0.5);
+                triang_angle = 0.5;
             }
         }
     }
