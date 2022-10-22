@@ -13,6 +13,8 @@ public class Program3 extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
+    private DcMotor lift1 = null;
+    private DcMotor lift2 = null;
     Servo servo;
 
     @Override
@@ -22,7 +24,10 @@ public class Program3 extends LinearOpMode {
         leftBackDrive  = hardwareMap.get(DcMotor.class, "left_back_drive");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
+        lift1 = hardwareMap.get(DcMotor.class,"lift1");
+        lift1 = hardwareMap.get(DcMotor.class,"lift1");
         servo = hardwareMap.get(Servo.class,"Servo");
+
         // Keep testing until ALL the wheels move the robot forward when you push the left joystick forward.
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
