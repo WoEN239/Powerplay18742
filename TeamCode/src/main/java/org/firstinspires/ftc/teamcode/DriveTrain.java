@@ -20,10 +20,15 @@ public class DriveTrain {
 
     public DriveTrain(HardwareMap hardwareMap, LinearOpMode _opMode) {
 
-        left_front_drive = hardwareMap.dcMotor.get("left_front_drive");
+        left_front_drive = hardwareMap.dcMotor.get("leftfront_drive");
         left_back_drive = hardwareMap.dcMotor.get("left_back_drive");
         right_front_drive = hardwareMap.dcMotor.get("right_front_drive");
         right_back_drive = hardwareMap.dcMotor.get("right_back_drive");
+        left_front_drive.setDirection(DcMotor.Direction.FORWARD);
+        left_back_drive.setDirection(DcMotor.Direction.FORWARD);
+        right_front_drive.setDirection(DcMotor.Direction.REVERSE);
+        right_back_drive.setDirection(DcMotor.Direction.REVERSE);
+
     }
 
     void reset() {
