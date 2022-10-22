@@ -43,13 +43,16 @@ public class Lift {
             hight = 0 * crr;
         }
         if (position == 1) {
-            hight = 25 * crr;
+            hight = 3 * crr;
         }
         if (position == 2) {
-            hight = 50 * crr;
+            hight = 37 * crr;
         }
         if (position == 3) {
-             hight = 90 * crr;
+            hight = 62 * crr;
+        }
+        if (position == 4) {
+             hight = 87 * crr;
         }
         double l1 = motor1.getCurrentPosition();
         double l2 = motor2.getCurrentPosition();

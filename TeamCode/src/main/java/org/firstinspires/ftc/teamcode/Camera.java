@@ -26,6 +26,7 @@ public class Camera {
 
     int ID_TAG_OF_INTEREST0 = 0;
     int ID_TAG_OF_INTEREST6 = 6;
+    int ID_TAG_OF_INTERESET18 = 18;
 
     AprilTagDetection tagOfInterest = null;
 
@@ -55,7 +56,7 @@ public class Camera {
             boolean tagFound = false;
 
             for (AprilTagDetection tag : currentDetections) {
-                if (tag.id == ID_TAG_OF_INTEREST0  || tag.id == ID_TAG_OF_INTEREST6) {
+                if (tag.id == ID_TAG_OF_INTEREST0 || tag.id == ID_TAG_OF_INTEREST6 || tag.id == ID_TAG_OF_INTERESET18) {
                     tagOfInterest = tag;
                     tagFound = true;
                     break;
@@ -63,10 +64,7 @@ public class Camera {
             }
 
         }
-        if (tagOfInterest == null)
-            return -1;
-        else
-            return tagOfInterest.id;
+        return tagOfInterest.id;
     }
 
     void stopcamera() {

@@ -10,7 +10,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.toDegrees;
 
 @Autonomous
-public class AutonomFtc2 extends LinearOpMode {
+public class AutonomFtc1 extends LinearOpMode {
     BNO055IMU gyro;
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
@@ -20,6 +20,7 @@ public class AutonomFtc2 extends LinearOpMode {
     Camera camera;
     Graber graber;
     Lift lift;
+
     @Override
 
     public void runOpMode() {
@@ -56,41 +57,44 @@ public class AutonomFtc2 extends LinearOpMode {
         telemetry.update();
         camera.stopcamera();
         graber = new Graber(hardwareMap);
-        lift = new Lift(hardwareMap, this );
-        TurnGuro(-90,0.25);
+        lift = new Lift(hardwareMap, this);
+
+        TurnGuro(90, 0.25);
         graber.Target_Graber(true);
         ForwardBack(95);
         graber.Target_Graber(false);
-        TurnGuro(180,0.25);
+        TurnGuro(-180, 0.25);
         ForwardBack(180);
-        TurnGuro(-90,0.25);
+        TurnGuro(90, 0.25);
         ForwardBack(90);
-        TurnGuro(45,0.25);
+        TurnGuro(-45, 0.25);
         ForwardBack(10);
         lift.setMotor(4);
         graber.Target_Graber(false);
         ForwardBack(-10);
         lift.setMotor(0);
-        TurnGuro(-45,0.25);
+        TurnGuro(45, 0.25);
         ForwardBack(-180);
-        if(c==0) {
-            TurnGuro(-90,0.25);
+
+        if (c == 0) {
+            TurnGuro(90, 0.25);
             ForwardBack(180);
-            TurnGuro(90,0.25);
+            TurnGuro(-90, 0.25);
             ForwardBack(90);
         }
-        if(c==6) {
-            TurnGuro(-90,0.25);
+
+        if (c == 6) {
+            TurnGuro(90, 0.25);
             ForwardBack(90);
-            TurnGuro(90,0.25);
+            TurnGuro(-90, 0.25);
             ForwardBack(90);
         }
-        if(c==18) {
+
+        if (c == 18) {
             ForwardBack(90);
         }
     }
-
-    void Turn ( double x){
+    void Turn(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();
@@ -130,7 +134,7 @@ public class AutonomFtc2 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    void TurnGuro ( double x, double v){
+    void TurnGuro(double x, double v) {
         double angle = toDegrees(gyro.getAngularOrientation().firstAngle);
         while ((abs(angle)) < x && opModeIsActive()) {
             leftFrontDrive.setPower(-v);
@@ -155,7 +159,7 @@ public class AutonomFtc2 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    void LeftRight ( double x){
+    void LeftRight(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();
@@ -195,7 +199,7 @@ public class AutonomFtc2 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    void ForwardBack ( double x){
+    void ForwardBack(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();
@@ -235,7 +239,7 @@ public class AutonomFtc2 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    void Diogonal3Axises ( double x, double y, double z){
+    void Diogonal3Axises(double x, double y, double z) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();
@@ -287,7 +291,7 @@ public class AutonomFtc2 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    void Diogonal2Axises ( double x, double y){
+    void Diogonal2Axises(double x, double y) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();

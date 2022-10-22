@@ -15,9 +15,6 @@ public class Graber {
         boolean oldtriang = false;
         double triang_angle = 0;
         double angel = 0;
-        if (triang == true) {
-            angel = 0.25;
-        }
         if (triang == true && oldtriang == false && triang_angle != 0.13) {
             servo.setPosition(0.13);
             triang_angle = 0.13;
