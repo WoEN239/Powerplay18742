@@ -59,7 +59,7 @@ public class AutonomFtc1 extends LinearOpMode {
         graber = new Graber(hardwareMap);
         lift = new Lift(hardwareMap, this);
 
-        TurnGuro(90, 0.25);
+        /*   TurnGuro(90, 0.25);
         graber.Target_Graber(true);
         ForwardBack(95);
         graber.Target_Graber(false);
@@ -93,6 +93,8 @@ public class AutonomFtc1 extends LinearOpMode {
         if (c == 18) {
             ForwardBack(90);
         }
+
+         */
     }
     void Turn(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();

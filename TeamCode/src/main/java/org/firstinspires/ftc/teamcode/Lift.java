@@ -12,8 +12,8 @@ public class Lift {
     private DcMotor motor1;
     private DcMotor motor2;
     private DcMotor svet;
-    private PidRegulator PIDZL1 = new PidRegulator(5.125, 0, 0);
-    private PidRegulator PIDZL2 = new PidRegulator(5.125, 0, 0);
+    private PidRegulator PIDZL1 = new PidRegulator(1.125, 0, 0);
+    private PidRegulator PIDZL2 = new PidRegulator(1125, 0, 0);
     double crr = 24 * 20 / (2.5 * PI);
     double told;
 
@@ -68,7 +68,7 @@ public class Lift {
         double t = 0;
         double tr = t - told;
         svet.setPower(1);
-        while (((abs(PIDZL1.err)) > 100 || (abs(PIDZL2.err)) > 100) && tr < 5000 && opMode.opModeIsActive()) {
+        while (((abs(PIDZL1.err)) > 100 || (abs(PIDZL2.err)) > 100) && tr < 1500 && opMode.opModeIsActive()) {
             t = System.currentTimeMillis() / 1000.0;
             tr = t - t1;
             l1 = motor1.getCurrentPosition();

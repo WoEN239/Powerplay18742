@@ -22,9 +22,9 @@ public class AutonomFTC extends LinearOpMode {
         graber.Target_Graber(false);
          //driveTrain.setMotor(100, 50, 0);
          sleep(100);
-         driveTrain.setMotor(0, 50, 0);
+         driveTrain.setMotor3axes(0, 50, 0);
         sleep(100);
-          driveTrain.setMotor(0,0,50);
+          driveTrain.setMotor3axes(0,0,50);
         sleep(100);
         sleep(500);
         //lift.setMotor(3);

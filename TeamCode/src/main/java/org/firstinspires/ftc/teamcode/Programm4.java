@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+
 @TeleOp
-public class Programm4  extends LinearOpMode {
+public class Programm4 extends LinearOpMode {
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
@@ -41,30 +43,22 @@ public class Programm4  extends LinearOpMode {
         svet.setDirection(DcMotor.Direction.FORWARD);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        Graber graber;
+
+
         waitForStart();
         while (opModeIsActive()) {
-            graber = new Graber(hardwareMap);
-
-            svet.setPower(0.25);
-            sleep(10);
-            svet.setPower(0.50);
-            sleep(10);
-            svet.setPower(0.75);
-            sleep(10);
-            svet.setPower(1);
             boolean square = gamepad1.square;
-            if (square == true && oldsquare == false && square_angle != 0.2) {
-                servo.setPosition(0.2);
+            if (square == true && oldsquare == false && square_angle != -0.65) {
+                servo.setPosition(0.65);
                 square_angle = 0;
             } else {
-                if (square == true && oldsquare == false && square_angle != 0.5) {
-                    servo.setPosition(0.5);
-                    square_angle = 0.5;
+                if (square == true && oldsquare == false && square_angle != 0.55) {
+                    servo.setPosition(0);
+                    square_angle = 1;
                 }
             }
             boolean circle = gamepad1.circle;
-            if (circle == true && circle_angle == 1) {
+            /*if (circle == true && circle_angle == 1) {
                 svet.setPower(1);
                 circle_angle = 0;
             }
@@ -72,6 +66,7 @@ public class Programm4  extends LinearOpMode {
                 svet.setPower(0);
                 circle_angle = 1;
             }
+            */
             boolean triangle = gamepad1.triangle;
             if (triangle == true) {
                 motor1.setPower(1);
@@ -86,18 +81,42 @@ public class Programm4  extends LinearOpMode {
                 motor1.setPower(-1);
                 motor2.setPower(-1);
             }
-            if (cross == false) {
+            if (!cross) {
                 motor1.setPower(0);
                 motor2.setPower(0);
             }
             double axial = -gamepad1.left_stick_y;
             double lateral = gamepad1.left_stick_x;
             double yaw = gamepad1.right_stick_x;
-
             double leftFrontPower = axial + lateral + yaw;
             double rightFrontPower = axial - lateral - yaw;
             double leftBackPower = axial - lateral + yaw;
             double rightBackPower = axial + lateral - yaw;
+
+            leftFrontPower = axial + lateral + yaw;
+            rightFrontPower = axial - lateral - yaw;
+            leftBackPower = axial - lateral + yaw;
+            rightBackPower = axial + lateral - yaw;
+            /*if (circle && circle_angle != 1) {
+                leftFrontPower = (axial + lateral + yaw) / 4;
+                rightFrontPower = (axial - lateral - yaw) / 4;
+                leftBackPower = (axial - lateral + yaw) / 4;
+                rightBackPower = (axial + lateral - yaw) / 4;
+                circle_angle = 1
+            }*/
+            if(gamepad1.right_trigger>0){
+                leftFrontPower /= 4;
+                rightFrontPower /= 4;
+                leftBackPower /= 4;
+                rightBackPower /= 4;
+            }
+            else if(gamepad1.right_trigger==0){
+                leftFrontPower *= 4;
+                rightFrontPower *= 4;
+                leftBackPower *= 4;
+                rightBackPower *= 4;
+            }
+
             leftFrontDrive.setPower(leftFrontPower);
             rightFrontDrive.setPower(rightFrontPower);
             leftBackDrive.setPower(leftBackPower);

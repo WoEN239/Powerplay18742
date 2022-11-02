@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 @Autonomous
-public class Program_Avtonom1 extends LinearOpMode {
+public class ProgramAvtonom1 extends LinearOpMode {
     private PidRegulator PIDX=new PidRegulator(0.025,0.0000001,0.001);
     private PidRegulator PIDY=new PidRegulator(0.025,0.0000001,0.001);
     private PidRegulator PIDZ=new PidRegulator(0.025,0.0000001,0.001);
