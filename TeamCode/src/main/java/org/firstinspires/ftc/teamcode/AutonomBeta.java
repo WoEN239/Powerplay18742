@@ -17,9 +17,13 @@ public class AutonomBeta extends LinearOpMode {
         telemetry.update();
 
          */
-        driveTrain.TurnGuro(90,0.15);
+        driveTrain.setMotor3axes(90,0,0);
+        driveTrain.setMotor3axes(-90,0,0);
+        driveTrain.setMotor3axes(0,90,0);
+        driveTrain.setMotor3axes(90,-90,0);
+        driveTrain.setMotor3axes(0,90,0);
+        driveTrain.setMotor3axes(90,-90,0);
         driveTrain.Horizontal(50);
-        lift.setMotor(1);
     }
 
 }

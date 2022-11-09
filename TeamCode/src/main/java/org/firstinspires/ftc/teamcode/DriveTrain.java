@@ -9,6 +9,10 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.*;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+
 public class DriveTrain {
     BNO055IMU gyro;
     private DcMotor left_front_drive;
@@ -71,34 +75,50 @@ public class DriveTrain {
         double motorsY = (-lfd + lbd + rfd - rbd) / 4;
         double motorsZ = (-lfd - lbd + rfd + rbd) / 4;
 
-        PIDX.target = x * crr;
-        PIDY.target = y * crr;
-        PIDZ.target = z * crr;
+        double targetx = x * crr;
+        double targety = y * crr;
+        double targetz = z * crr;
+        double errx = targetx - motorsX;
+        double erry = targety - motorsY;
+        double errz = targetz - motorsZ;
 
-        PIDX.update(motorsX);
-        PIDY.update(motorsY);
-        PIDZ.update(motorsZ);
+        PIDX.update(errx);
+        PIDY.update(erry);
+        PIDZ.update(errz);
         double t1 = System.currentTimeMillis() / 1000.0;
         double t = 0;
         double tr = t - told;
-        while (((abs(PIDX.err)) > 100 || (abs(PIDY.err)) > 100 || (abs(PIDZ.err)) > 100) && tr < 5000 && opMode.opModeIsActive()) {
+        while (((abs(errx)) > 100 || (abs(erry)) > 100 || (abs(errz)) > 100) && tr < 5000 && opMode.opModeIsActive()) {
             t = System.currentTimeMillis() / 1000.0;
             tr = t - t1;
             lfd = left_front_drive.getCurrentPosition();
             lbd = left_back_drive.getCurrentPosition();
             rfd = right_front_drive.getCurrentPosition();
             rbd = right_back_drive.getCurrentPosition();
+            double angle = toDegrees(gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle);
 
             motorsX = (lfd + lbd + rfd + rbd) / 4;
             motorsY = (-lfd + lbd + rfd - rbd) / 4;
             motorsZ = (-lfd - lbd + rfd + rbd) / 4;
-            double powerx = PIDX.update(motorsX);
-            double powery = PIDY.update(motorsY);
-            double powerz = PIDZ.update(motorsZ);
+            targetx = x * crr;
+            targety = y * crr;
+            targetz = z * crr;
+            errx = targetx - motorsX;
+            erry = targety - motorsY;
+            errz = targetz - angle;
 
-            double kx = 0.001;
-            double ky = 0.001;
-            double kz = 0.01;
+            if (errz > 180) {
+                errz -= 360;
+            }
+            if (errz < -180) {
+                errz += 360;
+            }
+
+            double powerx = PIDX.update(errx);
+            double powery = PIDY.update(erry);
+            double powerz = PIDZ.update(errz);
+
+
 
             left_front_drive.setPower(powerx - powery - powerz);
             left_back_drive.setPower(powerx + powery - powerz);
@@ -121,71 +141,7 @@ public class DriveTrain {
         right_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-    void TurnGuro(double x, double v) {
-        double angle = toDegrees(gyro.getAngularOrientation().firstAngle);
-        while ((abs(angle)) < x && opMode.opModeIsActive()){
-            left_front_drive.setPower(-v*signum(angle));
-            right_front_drive.setPower(v*signum(angle));
-            left_back_drive.setPower(-v*signum(angle));
-            right_back_drive.setPower(v*signum(angle));
-            angle = toDegrees(gyro.getAngularOrientation().firstAngle);
-        }
-        left_front_drive.setPower(0);
-        left_back_drive.setPower(0);
-        right_front_drive.setPower(0);
-        right_back_drive.setPower(0);
 
-        left_front_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        left_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        left_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        left_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        right_front_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        right_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-    void Turn(double x) {
-        double lfd = left_front_drive.getCurrentPosition();
-        double lbd = left_back_drive.getCurrentPosition();
-        double rfd = right_front_drive.getCurrentPosition();
-        double rbd = right_back_drive.getCurrentPosition();
-        double motors = (lfd + lbd + rfd + rbd) / 4;
-        double e = x * crr - motors;
-        while ((abs(e)) > 100 && opMode.opModeIsActive()) {
-            lfd = left_front_drive.getCurrentPosition();
-            lbd = left_back_drive.getCurrentPosition();
-            rfd = right_front_drive.getCurrentPosition();
-            rbd = right_back_drive.getCurrentPosition();
-            motors = (-lfd - lbd + rfd + rbd) / 4;
-            e = x * crr - motors;
-            double k = 0.09;
-            left_front_drive.setPower(-e * k);
-            right_front_drive.setPower(e * k);
-            left_front_drive.setPower(-e * k);
-            right_back_drive.setPower(e * k);
-            /*telemetry.addData("lfd", lfd);
-            telemetry.addData("lbd", lbd);
-            telemetry.addData("rfd", rfd);
-            telemetry.addData("rbd", rbd);
-            telemetry.addData("e", e);
-            telemetry.update();
-
-             */
-        }
-        left_front_drive.setPower(0);
-        left_back_drive.setPower(0);
-        right_front_drive.setPower(0);
-        right_back_drive.setPower(0);
-
-        left_front_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        left_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        left_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        left_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        right_front_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        right_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
     void Horizontal(double x) {
         double lfd = left_front_drive.getCurrentPosition();
         double lbd = left_back_drive.getCurrentPosition();
@@ -228,6 +184,7 @@ public class DriveTrain {
         right_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
     void Move(double x) {
         double lfd = left_front_drive.getCurrentPosition();
         double lbd = left_back_drive.getCurrentPosition();

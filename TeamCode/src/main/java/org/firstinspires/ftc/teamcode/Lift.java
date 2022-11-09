@@ -38,7 +38,7 @@ public class Lift {
 
     void setMotor(double position) {
         double z = 0;
-        double hight=0;
+        double hight = 0;
         if (position == 0) {
             hight = 0 * crr;
         }
@@ -52,15 +52,17 @@ public class Lift {
             hight = 62 * crr;
         }
         if (position == 4) {
-             hight = 87 * crr;
+            hight = 87 * crr;
         }
         double l1 = motor1.getCurrentPosition();
         double l2 = motor2.getCurrentPosition();
 
         double motorsY = (l1 + l2) / 2;
 
-        PIDZL1.target=hight;
-        PIDZL2.target=hight;
+        double target1 = hight;
+        double target2 = hight;
+        double err1 = target1 - l1;
+        double err2 = target2 - l2;
         PIDZL1.update(motorsY);
         PIDZL2.update(motorsY);
 
@@ -68,15 +70,18 @@ public class Lift {
         double t = 0;
         double tr = t - told;
         svet.setPower(1);
-        while (((abs(PIDZL1.err)) > 100 || (abs(PIDZL2.err)) > 100) && tr < 1500 && opMode.opModeIsActive()) {
+        while (((abs(err1)) > 100 || (abs(err2)) > 100) && tr < 1500 && opMode.opModeIsActive()) {
             t = System.currentTimeMillis() / 1000.0;
             tr = t - t1;
             l1 = motor1.getCurrentPosition();
             l2 = motor2.getCurrentPosition();
 
-            motorsY = (l1 + l2) / 2;
-            double poweryl1 = PIDZL1.update(motorsY);
-            double poweryl2 = PIDZL1.update(motorsY);
+            target1 = hight;
+            target2 = hight;
+            err1 = target1 - l1;
+            err2 = target2 - l2;
+            double poweryl1 = PIDZL1.update(err1);
+            double poweryl2 = PIDZL1.update(err2);
 
             motor1.setPower(poweryl1);
             motor2.setPower(poweryl2);
