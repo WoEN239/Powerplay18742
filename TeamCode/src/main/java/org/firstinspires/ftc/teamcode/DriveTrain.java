@@ -21,7 +21,7 @@ public class DriveTrain {
     private DcMotor right_back_drive;
     private PidRegulator PIDX = new PidRegulator(0.025, 0.0000001, 0.001);
     private PidRegulator PIDY = new PidRegulator(0.025, 0.0000001, 0.001);
-    private PidRegulator PIDZ = new PidRegulator(0.025, 0.0000001, 0.001);
+    private PidRegulator PIDZ = new PidRegulator(0.00025, 0.000000001, 0.00001);
     double told;
     double crr = 24 * 20 / (9.8 * PI);
     private LinearOpMode opMode;
@@ -65,6 +65,15 @@ public class DriveTrain {
         right_back_drive.setPower(rightRearMotorPower);
     }
 
+    void displayEncoders() {
+        opMode.telemetry.addData("lfd",  left_front_drive.getCurrentPosition());
+        opMode.telemetry.addData("lrd",  left_back_drive.getCurrentPosition());
+        opMode.telemetry.addData("rfd",  right_front_drive.getCurrentPosition());
+        opMode.telemetry.addData("rrd", right_back_drive.getCurrentPosition());
+    }
+
+
+
     void setMotor3axes(double x, double y, double z) {
         double lfd = left_front_drive.getCurrentPosition();
         double lbd = left_back_drive.getCurrentPosition();
@@ -99,7 +108,7 @@ public class DriveTrain {
 
             motorsX = (lfd + lbd + rfd + rbd) / 4;
             motorsY = (-lfd + lbd + rfd - rbd) / 4;
-            motorsZ = (-lfd - lbd + rfd + rbd) / 4;
+            //motorsZ = (-lfd - lbd + rfd + rbd) / 4;
             targetx = x * crr;
             targety = y * crr;
             targetz = z * crr;
@@ -117,7 +126,6 @@ public class DriveTrain {
             double powerx = PIDX.update(errx);
             double powery = PIDY.update(erry);
             double powerz = PIDZ.update(errz);
-
 
 
             left_front_drive.setPower(powerx - powery - powerz);
