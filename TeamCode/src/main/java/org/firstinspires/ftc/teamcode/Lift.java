@@ -23,9 +23,10 @@ public class Lift {
         opMode = _opMode;
         motor1 = hardwareMap.dcMotor.get("motor1");
         motor2 = hardwareMap.dcMotor.get("motor2");
-        svet = hardwareMap.dcMotor.get("svet");
         motor1.setDirection(DcMotorSimple.Direction.FORWARD);
-        motor2.setDirection(DcMotorSimple.Direction.FORWARD);
+        motor2.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     void reset() {
@@ -36,24 +37,22 @@ public class Lift {
     }
 
 
-    void setMotor(double position) {
+    void setPowers(double x) {
+        motor1.setPower(x);
+        motor2.setPower(x);
+    }
+
+    enum LiftPosition {
+        ZERO(0),GROUND(3),LOW(37),MIDDLE(62),UP(87);
+        private LiftPosition(int value){
+            this.value=value;
+        }
+        public int value;
+    }
+    void setMotor(LiftPosition position) {
         double z = 0;
-        double hight = 0;
-        if (position == 0) {
-            hight = 0 * crr;
-        }
-        if (position == 1) {
-            hight = 3 * crr;
-        }
-        if (position == 2) {
-            hight = 37 * crr;
-        }
-        if (position == 3) {
-            hight = 62 * crr;
-        }
-        if (position == 4) {
-            hight = 87 * crr;
-        }
+        double hight = position.value*crr;
+
         double l1 = motor1.getCurrentPosition();
         double l2 = motor2.getCurrentPosition();
 
