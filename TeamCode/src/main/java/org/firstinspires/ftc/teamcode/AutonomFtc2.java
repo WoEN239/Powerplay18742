@@ -64,7 +64,7 @@ public class AutonomFtc2 extends LinearOpMode {
 
         graber = new Graber(hardwareMap);
         lift = new Lift(hardwareMap, this );
-        lift.setMotor(2);
+        //lift.setMotor(2);
         // TurnGuro(85,0.25);
         //graber.Target_Graber(true);
         //ForwardBack(45,0.2);

@@ -49,8 +49,8 @@ public class TeleOpM extends LinearOpMode {
                 lightning.smooth();
             }
             double axial = -gamepad1.left_stick_y;
-            double lateral = gamepad1.left_stick_x;
-            double yaw = gamepad1.right_stick_x;
+            double lateral = -gamepad1.left_stick_x;
+            double yaw = -gamepad1.right_stick_x;
 
             if (gamepad1.right_trigger > 0.1) {
                 axial /= 4;

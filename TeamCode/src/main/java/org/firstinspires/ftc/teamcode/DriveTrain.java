@@ -2,12 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
-import static java.lang.Math.signum;
 import static java.lang.Math.toDegrees;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -19,9 +19,9 @@ public class DriveTrain {
     private DcMotor left_back_drive;
     private DcMotor right_front_drive;
     private DcMotor right_back_drive;
-    private PidRegulator PIDX = new PidRegulator(0.025, 0.0000001, 0.001);
-    private PidRegulator PIDY = new PidRegulator(0.025, 0.0000001, 0.001);
-    private PidRegulator PIDZ = new PidRegulator(0.00025, 0.000000001, 0.00001);
+    private PidRegulator PIDX = new PidRegulator(0.025, 0.0000001, 0);
+    private PidRegulator PIDY = new PidRegulator(0.025, 0.0000001, 0);
+    private PidRegulator PIDZ = new PidRegulator(0.0025, 0, 0);
     double told;
     double crr = 24 * 20 / (9.8 * PI);
     private LinearOpMode opMode;
@@ -60,12 +60,12 @@ public class DriveTrain {
 
     void setPowers(double x, double y, double z) {
         double leftFrontMotorPower = x - y - z;
-        double rightFrontMotorPower = x + y - z;
+        double rightFrontMotorPower = x + y + z;
         double leftRearMotorPower = x + y - z;
         double rightRearMotorPower = x - y + z;
         left_front_drive.setPower(leftFrontMotorPower);
-        left_back_drive.setPower(rightFrontMotorPower);
-        right_front_drive.setPower(leftRearMotorPower);
+        left_back_drive.setPower(leftRearMotorPower);
+        right_front_drive.setPower(rightFrontMotorPower);
         right_back_drive.setPower(rightRearMotorPower);
     }
 
@@ -79,6 +79,7 @@ public class DriveTrain {
 
 
     void setMotor3axes(double x, double y, double z) {
+        reset();
         double lfd = left_front_drive.getCurrentPosition();
         double lbd = left_back_drive.getCurrentPosition();
         double rfd = right_front_drive.getCurrentPosition();
@@ -90,7 +91,7 @@ public class DriveTrain {
 
         double targetx = x * crr;
         double targety = y * crr;
-        double targetz = z * crr;
+        double targetz = z;
         double errx = targetx - motorsX;
         double erry = targety - motorsY;
         double errz = targetz - motorsZ;
@@ -108,6 +109,8 @@ public class DriveTrain {
             lbd = left_back_drive.getCurrentPosition();
             rfd = right_front_drive.getCurrentPosition();
             rbd = right_back_drive.getCurrentPosition();
+
+            //TODO remove toDegrees()
             double angle = toDegrees(gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle);
 
             motorsX = (lfd + lbd + rfd + rbd) / 4;
@@ -115,11 +118,12 @@ public class DriveTrain {
             //motorsZ = (-lfd - lbd + rfd + rbd) / 4;
             targetx = x * crr;
             targety = y * crr;
-            targetz = z * crr;
+            targetz = z;
             errx = targetx - motorsX;
             erry = targety - motorsY;
             errz = targetz - angle;
-
+            opMode.telemetry.addData("angel", errz);
+            opMode.telemetry.update();
             if (errz > 180) {
                 errz -= 360;
             }

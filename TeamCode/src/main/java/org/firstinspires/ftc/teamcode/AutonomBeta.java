@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+@Autonomous
 public class AutonomBeta extends LinearOpMode {
     DriveTrain driveTrain;
     Graber graber;
@@ -14,14 +16,14 @@ public class AutonomBeta extends LinearOpMode {
         graber = new Graber(hardwareMap);
         lift = new Lift(hardwareMap, this);
         lightning = new Lightning(hardwareMap);
-        camera = new Camera(hardwareMap);
-        int  c = camera.readCamera();
-        telemetry.addData("camera", c);
+        //camera = new Camera(hardwareMap);
+        //int  c = camera.readCamera();
+        //telemetry.addData("camera", c);
         telemetry.update();
 
         waitForStart();
         graber.Target_Graber(false);
-        driveTrain.setMotor3axes(0,0,180);
+        driveTrain.setMotor3axes(0,0,180);/*
         driveTrain.setMotor3axes(0, 45, 0);
         driveTrain.setMotor3axes(45, 0, 0);
         driveTrain.setMotor3axes(0, 0, 45);
@@ -53,7 +55,7 @@ public class AutonomBeta extends LinearOpMode {
         }
         if(c==18){
             driveTrain.setMotor3axes(0,-90,0);
-        }
+        }*/
     }
 
 }
