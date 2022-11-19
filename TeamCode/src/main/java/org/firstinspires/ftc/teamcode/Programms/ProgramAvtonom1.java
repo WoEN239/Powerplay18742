@@ -7,7 +7,7 @@ import static java.lang.Math.abs;
 
 import org.firstinspires.ftc.teamcode.Robot.DriveTrain;
 
-@Autonomous
+
 public class ProgramAvtonom1 extends LinearOpMode {
     DriveTrain driveTrain;
     double crr = 24 * 20 / (9.8 * PI);

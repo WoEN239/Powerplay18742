@@ -39,17 +39,34 @@ public class TeleOpM extends LinearOpMode {
             graber.Target_Graber(graberPosition);
             boolean triangle = gamepad1.triangle;
             boolean cross = gamepad1.cross;
-            if (triangle) {
-                lift.setPowers(1);
-                lightning.smooth();
+            lift.displayEncoders();
+            if(gamepad1.left_trigger>0.1) {
+                if (triangle) {
+                    lift.setPowers(1);
+                    lightning.smooth();
+                }
+                if (cross) {
+                    lift.setPowers(-1);
+                    lightning.smooth();
+                }
+                if (!triangle && !cross) {
+                    lift.setPowers(0);
+                    lightning.smooth();
+                }
             }
-            if (cross) {
-                lift.setPowers(-1);
-                lightning.smooth();
-            }
-            if (!triangle && !cross) {
-                lift.setPowers(0);
-                lightning.smooth();
+            else {
+                if (triangle) {
+                    lift.setPowersLimit(1);
+                    lightning.smooth();
+                }
+                if (cross) {
+                    lift.setPowersLimit(-1);
+                    lightning.smooth();
+                }
+                if (!triangle && !cross) {
+                    lift.setPowersLimit(0);
+                    lightning.smooth();
+                }
             }
             double axial = -gamepad1.left_stick_y;
             double lateral = -gamepad1.left_stick_x;

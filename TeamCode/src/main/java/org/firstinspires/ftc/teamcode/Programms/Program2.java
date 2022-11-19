@@ -29,7 +29,7 @@ public class Program2  extends LinearOpMode {
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
         motor1 = hardwareMap.get(DcMotor.class, "motor1");
         motor2 = hardwareMap.get(DcMotor.class, "motor2");
-        svet = hardwareMap.get(DcMotor.class, "svet");
+        svet = hardwareMap.get(DcMotor.class, "svet1");
         servo = hardwareMap.get(Servo.class, "Servo");
 
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);

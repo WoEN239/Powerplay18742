@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.Robot.DriveTrain;
 import org.firstinspires.ftc.teamcode.Robot.Graber;
 import org.firstinspires.ftc.teamcode.Robot.Lift;
 
-@Autonomous
+
 public class AutonomFTC extends LinearOpMode {
     DriveTrain driveTrain;
     Graber graber;

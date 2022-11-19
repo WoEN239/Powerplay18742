@@ -65,9 +65,8 @@ public class Camera {
             }
 
         }
-        if (tagOfInterest == null) {
-            tagOfInterest.id = -1;
-        }
+        if (tagOfInterest == null)
+            return -1;
         return tagOfInterest.id;
     }
 

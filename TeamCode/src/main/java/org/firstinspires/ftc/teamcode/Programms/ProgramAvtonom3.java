@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.toDegrees;
-@Autonomous
+
 public class ProgramAvtonom3 extends LinearOpMode {
     BNO055IMU gyro;
     private DcMotor leftFrontDrive = null;

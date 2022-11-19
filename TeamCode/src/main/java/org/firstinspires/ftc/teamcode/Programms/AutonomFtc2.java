@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Robot.Camera;
 import org.firstinspires.ftc.teamcode.Robot.Graber;
 import org.firstinspires.ftc.teamcode.Robot.Lift;
 
-@Autonomous
+
 public class AutonomFtc2 extends LinearOpMode {
     BNO055IMU gyro;
     private DcMotor leftFrontDrive = null;

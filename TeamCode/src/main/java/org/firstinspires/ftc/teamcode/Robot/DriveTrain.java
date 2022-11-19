@@ -8,6 +8,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -19,9 +20,9 @@ public class DriveTrain {
     private DcMotor left_back_drive;
     private DcMotor right_front_drive;
     private DcMotor right_back_drive;
-    private PidRegulator PIDX = new PidRegulator(0.025, 0.0000001, 0);
-    private PidRegulator PIDY = new PidRegulator(0.025, 0.0000001, 0);
-    private PidRegulator PIDZ = new PidRegulator(0.0075, 0, 0);
+    private PidRegulator PIDX = new PidRegulator(0.025, 0.0000001, 0.0000001);
+    private PidRegulator PIDY = new PidRegulator(0.025, 0.0000001, 0.0000001);
+    private PidRegulator PIDZ = new PidRegulator(0.012, 0, 0);
     double told;
     double crr = 24 * 20 / (9.8 * PI);
     private LinearOpMode opMode;
@@ -60,6 +61,9 @@ public class DriveTrain {
     }
 
     public void setPowers(double x, double y, double z) {
+        x = Range.clip(x, -1 ,1) ;
+        y = Range.clip(y, -1 ,1) ;
+        z = Range.clip(z, -1 ,1) ;
         double leftFrontMotorPower = x - y - z;
         double rightFrontMotorPower = x + y + z;
         double leftRearMotorPower = x + y - z;
@@ -80,6 +84,7 @@ public class DriveTrain {
 
     public void setMotor3axes(double x, double y, double z) {
         reset();
+
         double lfd = left_front_drive.getCurrentPosition();
         double lbd = left_back_drive.getCurrentPosition();
         double rfd = right_front_drive.getCurrentPosition();
@@ -87,22 +92,26 @@ public class DriveTrain {
 
         double motorsX = (lfd + lbd + rfd + rbd) / 4;
         double motorsY = (-lfd + lbd + rfd - rbd) / 4;
-        double motorsZ = (-lfd - lbd + rfd + rbd) / 4;
 
         double targetx = x * crr;
         double targety = y * crr;
         double errx = targetx - motorsX;
         double erry = targety - motorsY;
         targetangle = targetangle + z;
-        double errz = targetangle - motorsZ;
+        double errz = targetangle - gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
 
+        while (abs(errz) > 180) {
+            errz -= 360 * signum(errz);
+
+        }
         PIDX.update(errx);
         PIDY.update(erry);
         PIDZ.update(errz);
         double t1 = System.currentTimeMillis() / 1000.0;
         double t = 0;
         double tr = t - told;
-        while (((abs(errx)) > 100 || (abs(erry)) > 100 || (abs(errz)) > 3) && tr < 5000 && opMode.opModeIsActive()) {
+
+        while (((abs(errx)) > 100 || (abs(erry)) > 100 || (abs(errz)) > 5) && tr < 5000 && opMode.opModeIsActive()) {
             t = System.currentTimeMillis() / 1000.0;
             tr = t - t1;
             lfd = left_front_drive.getCurrentPosition();
@@ -118,12 +127,11 @@ public class DriveTrain {
             //motorsZ = (-lfd - lbd + rfd + rbd) / 4;
             targetx = x * crr;
             targety = y * crr;
-            targetangle = targetangle + z;
             errx = targetx - motorsX;
             erry = targety - motorsY;
             errz = targetangle - angle;
-            while (abs(errz)>180) {
-                    errz -= 360*signum(errz);
+            while (abs(errz) > 180) {
+                errz -= 360 * signum(errz);
 
             }
 
@@ -135,10 +143,7 @@ public class DriveTrain {
             double powerz = PIDZ.update(errz);
 
 
-            left_front_drive.setPower(powerx - powery - powerz);
-            left_back_drive.setPower(powerx + powery - powerz);
-            right_front_drive.setPower(powerx + powery + powerz);
-            right_back_drive.setPower(powerx - powery + powerz);
+            setPowers(powerx,powery,powerz);
             told = t;
 
         }
