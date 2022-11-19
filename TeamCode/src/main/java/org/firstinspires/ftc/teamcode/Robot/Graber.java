@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Robot;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -10,13 +10,13 @@ public class Graber {
         servo = hardwareMap.get(Servo.class, "Servo");
     }
 
-    void Target_Graber(boolean triang) {
+    public void Target_Graber(boolean triang) {
 
         if (triang) {
-            servo.setPosition(0.13);
+            servo.setPosition(0.865);
         }
         else {
-            servo.setPosition(0.5);
+            servo.setPosition(1);
 
         }
     }

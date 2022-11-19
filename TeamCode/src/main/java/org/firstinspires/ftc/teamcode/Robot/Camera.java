@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Robot;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Programms.AprilTagDetectionPipeline;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -49,7 +50,7 @@ public class Camera {
         });
     }
 
-    int readCamera() {
+    public int readCamera() {
         ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
         if (currentDetections.size() != 0) {
@@ -70,7 +71,7 @@ public class Camera {
         return tagOfInterest.id;
     }
 
-    void stopcamera() {
+    public void stopcamera() {
         camera.closeCameraDevice();
     }
 }

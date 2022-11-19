@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Robot;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
@@ -37,19 +37,19 @@ public class Lift {
     }
 
 
-    void setPowers(double x) {
+    public void setPowers(double x) {
         motor1.setPower(x);
         motor2.setPower(x);
     }
 
-    enum LiftPosition {
+    public enum LiftPosition {
         ZERO(0),GROUND(3),LOW(37),MIDDLE(62),UP(87);
         private LiftPosition(int value){
             this.value=value;
         }
         public int value;
     }
-    void setMotor(LiftPosition position) {
+    public void setMotor(LiftPosition position) {
         double z = 0;
         double hight = position.value*crr;
 

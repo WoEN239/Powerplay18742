@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Robot;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
-import static java.lang.Math.toDegrees;
+import static java.lang.Math.signum;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -21,10 +21,11 @@ public class DriveTrain {
     private DcMotor right_back_drive;
     private PidRegulator PIDX = new PidRegulator(0.025, 0.0000001, 0);
     private PidRegulator PIDY = new PidRegulator(0.025, 0.0000001, 0);
-    private PidRegulator PIDZ = new PidRegulator(0.0025, 0, 0);
+    private PidRegulator PIDZ = new PidRegulator(0.0075, 0, 0);
     double told;
     double crr = 24 * 20 / (9.8 * PI);
     private LinearOpMode opMode;
+    double targetangle = 0;
 
     public DriveTrain(HardwareMap hardwareMap, LinearOpMode _opMode) {
         opMode = _opMode;
@@ -46,7 +47,7 @@ public class DriveTrain {
 
     }
 
-    void reset() {
+    public void reset() {
 
         left_front_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         left_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -58,7 +59,7 @@ public class DriveTrain {
         right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    void setPowers(double x, double y, double z) {
+    public void setPowers(double x, double y, double z) {
         double leftFrontMotorPower = x - y - z;
         double rightFrontMotorPower = x + y + z;
         double leftRearMotorPower = x + y - z;
@@ -69,16 +70,15 @@ public class DriveTrain {
         right_back_drive.setPower(rightRearMotorPower);
     }
 
-    void displayEncoders() {
-        opMode.telemetry.addData("lfd",  left_front_drive.getCurrentPosition());
-        opMode.telemetry.addData("lrd",  left_back_drive.getCurrentPosition());
-        opMode.telemetry.addData("rfd",  right_front_drive.getCurrentPosition());
+    public void displayEncoders() {
+        opMode.telemetry.addData("lfd", left_front_drive.getCurrentPosition());
+        opMode.telemetry.addData("lrd", left_back_drive.getCurrentPosition());
+        opMode.telemetry.addData("rfd", right_front_drive.getCurrentPosition());
         opMode.telemetry.addData("rrd", right_back_drive.getCurrentPosition());
     }
 
 
-
-    void setMotor3axes(double x, double y, double z) {
+    public void setMotor3axes(double x, double y, double z) {
         reset();
         double lfd = left_front_drive.getCurrentPosition();
         double lbd = left_back_drive.getCurrentPosition();
@@ -91,10 +91,10 @@ public class DriveTrain {
 
         double targetx = x * crr;
         double targety = y * crr;
-        double targetz = z;
         double errx = targetx - motorsX;
         double erry = targety - motorsY;
-        double errz = targetz - motorsZ;
+        targetangle = targetangle + z;
+        double errz = targetangle - motorsZ;
 
         PIDX.update(errx);
         PIDY.update(erry);
@@ -102,7 +102,7 @@ public class DriveTrain {
         double t1 = System.currentTimeMillis() / 1000.0;
         double t = 0;
         double tr = t - told;
-        while (((abs(errx)) > 100 || (abs(erry)) > 100 || (abs(errz)) > 100) && tr < 5000 && opMode.opModeIsActive()) {
+        while (((abs(errx)) > 100 || (abs(erry)) > 100 || (abs(errz)) > 3) && tr < 5000 && opMode.opModeIsActive()) {
             t = System.currentTimeMillis() / 1000.0;
             tr = t - t1;
             lfd = left_front_drive.getCurrentPosition();
@@ -110,26 +110,25 @@ public class DriveTrain {
             rfd = right_front_drive.getCurrentPosition();
             rbd = right_back_drive.getCurrentPosition();
 
-            //TODO remove toDegrees()
-            double angle = toDegrees(gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle);
+
+            double angle = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
 
             motorsX = (lfd + lbd + rfd + rbd) / 4;
             motorsY = (-lfd + lbd + rfd - rbd) / 4;
             //motorsZ = (-lfd - lbd + rfd + rbd) / 4;
             targetx = x * crr;
             targety = y * crr;
-            targetz = z;
+            targetangle = targetangle + z;
             errx = targetx - motorsX;
             erry = targety - motorsY;
-            errz = targetz - angle;
-            opMode.telemetry.addData("angel", errz);
+            errz = targetangle - angle;
+            while (abs(errz)>180) {
+                    errz -= 360*signum(errz);
+
+            }
+
+            opMode.telemetry.addData("angel", angle);
             opMode.telemetry.update();
-            if (errz > 180) {
-                errz -= 360;
-            }
-            if (errz < -180) {
-                errz += 360;
-            }
 
             double powerx = PIDX.update(errx);
             double powery = PIDY.update(erry);
@@ -158,7 +157,7 @@ public class DriveTrain {
         right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    void Horizontal(double x) {
+    public void Horizontal(double x) {
         double lfd = left_front_drive.getCurrentPosition();
         double lbd = left_back_drive.getCurrentPosition();
         double rfd = right_front_drive.getCurrentPosition();
@@ -201,7 +200,7 @@ public class DriveTrain {
         right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    void Move(double x) {
+    public void Move(double x) {
         double lfd = left_front_drive.getCurrentPosition();
         double lbd = left_back_drive.getCurrentPosition();
         double rfd = right_front_drive.getCurrentPosition();

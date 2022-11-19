@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Programms;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -7,7 +7,7 @@ import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.toDegrees;
 @Autonomous
-public class ProgramAvtonom3 extends LinearOpMode {
+public class ProgramAvtonom2 extends LinearOpMode {
     BNO055IMU gyro;
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
@@ -41,8 +41,8 @@ public class ProgramAvtonom3 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
-
-
+        TurnGuro(85, 0.15);
+        TurnGuro(-85, -0.15);
     }
     void Turn(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
@@ -185,7 +185,7 @@ public class ProgramAvtonom3 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-    void Diogonal3Axises(double x, double y, double z) {
+    void Diogonal(double x, double y, double z) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();
@@ -221,51 +221,6 @@ public class ProgramAvtonom3 extends LinearOpMode {
             telemetry.addData("ex", ex);
             telemetry.addData("ey", ey);
             telemetry.addData("ez", ez);
-            telemetry.update();
-        }
-        leftFrontDrive.setPower(0);
-        rightFrontDrive.setPower(0);
-        leftBackDrive.setPower(0);
-        rightBackDrive.setPower(0);
-        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-    void Diogonal2Axises(double x, double y) {
-        double lfd = leftFrontDrive.getCurrentPosition();
-        double lbd = leftBackDrive.getCurrentPosition();
-        double rfd = rightFrontDrive.getCurrentPosition();
-        double rbd = rightBackDrive.getCurrentPosition();
-        double motorsX = (lfd + lbd + rfd + rbd) / 4;
-        double motorsY = (-lfd + lbd + rfd - rbd) / 4;
-        double ex = x * crr - motorsX;
-        double ey = y * crr - motorsY;
-        while ((abs(ex)) > 100 && (abs(ey)) > 100 && opModeIsActive()) {
-            lfd = leftFrontDrive.getCurrentPosition();
-            lbd = leftBackDrive.getCurrentPosition();
-            rfd = rightFrontDrive.getCurrentPosition();
-            rbd = rightBackDrive.getCurrentPosition();
-            motorsX = (lfd + lbd + rfd + rbd) / 4;
-            motorsY = (-lfd + lbd + rfd - rbd) / 4;
-            ex = x * crr - motorsX;
-            ey = y * crr - motorsY;
-            double kx = 0.01;
-            double ky = 0.01;
-            leftFrontDrive.setPower(ex * kx - ey * ky);
-            rightFrontDrive.setPower(ex * kx + ey * ky);
-            leftBackDrive.setPower(ex * kx + ey * ky);
-            rightBackDrive.setPower(ex * kx - ey * ky);
-            telemetry.addData("lfd", lfd);
-            telemetry.addData("lbd", lbd);
-            telemetry.addData("rfd", rfd);
-            telemetry.addData("rbd", rbd);
-            telemetry.addData("ex", ex);
-            telemetry.addData("ey", ey);
             telemetry.update();
         }
         leftFrontDrive.setPower(0);

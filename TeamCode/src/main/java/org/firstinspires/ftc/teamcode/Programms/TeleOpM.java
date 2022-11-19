@@ -1,9 +1,12 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Programms;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.teamcode.Robot.DriveTrain;
+import org.firstinspires.ftc.teamcode.Robot.Graber;
+import org.firstinspires.ftc.teamcode.Robot.Lift;
+import org.firstinspires.ftc.teamcode.Robot.Lightning;
 
 @TeleOp
 public class TeleOpM extends LinearOpMode {
@@ -30,10 +33,10 @@ public class TeleOpM extends LinearOpMode {
             boolean square = gamepad1.square;
             if (square && !oldsquare) {
                 graberPosition = !graberPosition;
-                graber.Target_Graber(graberPosition);
+
             }
             boolean circle = gamepad1.circle;
-
+            graber.Target_Graber(graberPosition);
             boolean triangle = gamepad1.triangle;
             boolean cross = gamepad1.cross;
             if (triangle) {

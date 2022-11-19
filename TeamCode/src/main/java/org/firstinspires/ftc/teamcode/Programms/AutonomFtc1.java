@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Programms;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -9,12 +9,12 @@ import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.toDegrees;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.teamcode.Robot.Camera;
+import org.firstinspires.ftc.teamcode.Robot.Graber;
+import org.firstinspires.ftc.teamcode.Robot.Lift;
 
 @Autonomous
-public class AutonomFtc2 extends LinearOpMode {
+public class AutonomFtc1 extends LinearOpMode {
     BNO055IMU gyro;
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
@@ -24,6 +24,7 @@ public class AutonomFtc2 extends LinearOpMode {
     Camera camera;
     Graber graber;
     Lift lift;
+
     @Override
 
     public void runOpMode() {
@@ -54,54 +55,52 @@ public class AutonomFtc2 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
+
         int c = camera.readCamera();
         telemetry.addData("camera", c);
         telemetry.update();
         camera.stopcamera();
-
-        telemetry.addData("angle", gyro.getAngularOrientation());
-        telemetry.update();
-
         graber = new Graber(hardwareMap);
-        lift = new Lift(hardwareMap, this );
-        //lift.setMotor(2);
-        // TurnGuro(85,0.25);
-        //graber.Target_Graber(true);
-        //ForwardBack(45,0.2);
-        //ForwardBack(-20,0.2 );
-        //TurnGuro(-90,-0.25);
-        //graber.Target_Graber(false);
-        /*ForwardBack(90);
-        TurnGuro(-90,0.25);
-        ForwardBack(45);
-        TurnGuro(45,0.25);
-        ForwardBack(5);
+        lift = new Lift(hardwareMap, this);
+
+        /*   TurnGuro(90, 0.25);
+        graber.Target_Graber(true);
+        ForwardBack(95);
+        graber.Target_Graber(false);
+        TurnGuro(-180, 0.25);
+        ForwardBack(180);
+        TurnGuro(90, 0.25);
+        ForwardBack(90);
+        TurnGuro(-45, 0.25);
+        ForwardBack(10);
         lift.setMotor(4);
         graber.Target_Graber(false);
-        ForwardBack(-5);
+        ForwardBack(-10);
         lift.setMotor(0);
-        TurnGuro(-45,0.25);
-        ForwardBack(-90);
-        if(c==0) {
-            TurnGuro(-90,0.25);
+        TurnGuro(45, 0.25);
+        ForwardBack(-180);
+
+        if (c == 0) {
+            TurnGuro(90, 0.25);
+            ForwardBack(180);
+            TurnGuro(-90, 0.25);
             ForwardBack(90);
-            TurnGuro(90,0.25);
-            ForwardBack(45);
         }
-        if(c==6) {
-            TurnGuro(-90,0.25);
-            ForwardBack(45);
-            TurnGuro(90,0.25);
-            ForwardBack(45);
+
+        if (c == 6) {
+            TurnGuro(90, 0.25);
+            ForwardBack(90);
+            TurnGuro(-90, 0.25);
+            ForwardBack(90);
         }
-        if(c==18) {
-            ForwardBack(45);
-        }\
+
+        if (c == 18) {
+            ForwardBack(90);
+        }
 
          */
     }
-
-    void Turn ( double x){
+    void Turn(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();
@@ -141,37 +140,9 @@ public class AutonomFtc2 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    void TurnGuro ( double x, double v){
-        /*double angle = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
-        // angle = toDegrees(gyro.getAngularOrientation().firstAngle);
-        while ((abs(angle)) < x && opModeIsActive()) {
-            leftFrontDrive.setPower(-v);
-            rightFrontDrive.setPower(v);
-            leftBackDrive.setPower(-v);
-            rightBackDrive.setPower(v);
-            angle = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
-
-            telemetry.addData("angle", angle);
-            telemetry.update();
-
-
-        }
-        leftFrontDrive.setPower(0);
-        rightFrontDrive.setPower(0);
-        leftBackDrive.setPower(0);
-        rightBackDrive.setPower(0);
-        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-         */
+    void TurnGuro(double x, double v) {
         double angle = toDegrees(gyro.getAngularOrientation().firstAngle);
-        while ((abs(angle)) < x && opModeIsActive()){
+        while ((abs(angle)) < x && opModeIsActive()) {
             leftFrontDrive.setPower(-v);
             rightFrontDrive.setPower(v);
             leftBackDrive.setPower(-v);
@@ -194,7 +165,7 @@ public class AutonomFtc2 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    void LeftRight ( double x){
+    void LeftRight(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();
@@ -234,7 +205,7 @@ public class AutonomFtc2 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    void ForwardBack ( double x,double power){
+    void ForwardBack(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();
@@ -249,18 +220,6 @@ public class AutonomFtc2 extends LinearOpMode {
             motors = (lfd + lbd + rfd + rbd) / 4;
             e = x * crr - motors;
             double k = 0.01;
-            if(power==1) {
-                leftFrontDrive.setPower(e * k);
-                rightFrontDrive.setPower(e * k);
-                leftBackDrive.setPower(e * k);
-                rightBackDrive.setPower(e * k);
-            }
-            if(power<1) {
-                leftFrontDrive.setPower((e * k)/8);
-                rightFrontDrive.setPower((e * k)/8);
-                leftBackDrive.setPower((e * k)/8);
-                rightBackDrive.setPower((e * k)/8);
-            }
             leftFrontDrive.setPower(e * k);
             rightFrontDrive.setPower(e * k);
             leftBackDrive.setPower(e * k);
@@ -286,7 +245,7 @@ public class AutonomFtc2 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    void Diogonal3Axises ( double x, double y, double z){
+    void Diogonal3Axises(double x, double y, double z) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();
@@ -338,7 +297,7 @@ public class AutonomFtc2 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    void Diogonal2Axises ( double x, double y){
+    void Diogonal2Axises(double x, double y) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
         double rfd = rightFrontDrive.getCurrentPosition();

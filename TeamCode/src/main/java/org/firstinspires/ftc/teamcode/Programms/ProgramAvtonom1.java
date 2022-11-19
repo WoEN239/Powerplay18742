@@ -1,14 +1,15 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Programms;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
+
+import org.firstinspires.ftc.teamcode.Robot.DriveTrain;
+
 @Autonomous
 public class ProgramAvtonom1 extends LinearOpMode {
-    DriveTrain  driveTrain;
+    DriveTrain driveTrain;
     double crr = 24 * 20 / (9.8 * PI);
 
     @Override

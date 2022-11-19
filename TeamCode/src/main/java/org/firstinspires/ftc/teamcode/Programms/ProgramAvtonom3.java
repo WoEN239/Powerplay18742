@@ -1,31 +1,21 @@
-package org.firstinspires.ftc.teamcode;
-
+package org.firstinspires.ftc.teamcode.Programms;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.toDegrees;
-
 @Autonomous
-public class AutonomFtc1 extends LinearOpMode {
+public class ProgramAvtonom3 extends LinearOpMode {
     BNO055IMU gyro;
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
     double crr = 24 * 20 / (9.8 * PI);
-    Camera camera;
-    Graber graber;
-    Lift lift;
-
     @Override
-
     public void runOpMode() {
-        camera = new Camera(hardwareMap);
-
         gyro = hardwareMap.get(BNO055IMU.class, "imu");
 
         gyro.initialize(new BNO055IMU.Parameters());
@@ -52,49 +42,7 @@ public class AutonomFtc1 extends LinearOpMode {
 
         waitForStart();
 
-        int c = camera.readCamera();
-        telemetry.addData("camera", c);
-        telemetry.update();
-        camera.stopcamera();
-        graber = new Graber(hardwareMap);
-        lift = new Lift(hardwareMap, this);
 
-        /*   TurnGuro(90, 0.25);
-        graber.Target_Graber(true);
-        ForwardBack(95);
-        graber.Target_Graber(false);
-        TurnGuro(-180, 0.25);
-        ForwardBack(180);
-        TurnGuro(90, 0.25);
-        ForwardBack(90);
-        TurnGuro(-45, 0.25);
-        ForwardBack(10);
-        lift.setMotor(4);
-        graber.Target_Graber(false);
-        ForwardBack(-10);
-        lift.setMotor(0);
-        TurnGuro(45, 0.25);
-        ForwardBack(-180);
-
-        if (c == 0) {
-            TurnGuro(90, 0.25);
-            ForwardBack(180);
-            TurnGuro(-90, 0.25);
-            ForwardBack(90);
-        }
-
-        if (c == 6) {
-            TurnGuro(90, 0.25);
-            ForwardBack(90);
-            TurnGuro(-90, 0.25);
-            ForwardBack(90);
-        }
-
-        if (c == 18) {
-            ForwardBack(90);
-        }
-
-         */
     }
     void Turn(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
@@ -135,10 +83,9 @@ public class AutonomFtc1 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
     void TurnGuro(double x, double v) {
         double angle = toDegrees(gyro.getAngularOrientation().firstAngle);
-        while ((abs(angle)) < x && opModeIsActive()) {
+        while ((abs(angle)) < x && opModeIsActive()){
             leftFrontDrive.setPower(-v);
             rightFrontDrive.setPower(v);
             leftBackDrive.setPower(-v);
@@ -160,7 +107,6 @@ public class AutonomFtc1 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
     void LeftRight(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
@@ -200,7 +146,6 @@ public class AutonomFtc1 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
     void ForwardBack(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
@@ -240,7 +185,6 @@ public class AutonomFtc1 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
     void Diogonal3Axises(double x, double y, double z) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
@@ -292,7 +236,6 @@ public class AutonomFtc1 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
     void Diogonal2Axises(double x, double y) {
         double lfd = leftFrontDrive.getCurrentPosition();
         double lbd = leftBackDrive.getCurrentPosition();
