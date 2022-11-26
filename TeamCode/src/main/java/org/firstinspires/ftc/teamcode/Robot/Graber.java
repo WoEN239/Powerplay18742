@@ -13,7 +13,7 @@ public class Graber {
     public void Target_Graber(boolean triang) {
 
         if (triang) {
-            servo.setPosition(0.865);
+            servo.setPosition(0.805);
         }
         else {
             servo.setPosition(1);

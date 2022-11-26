@@ -20,9 +20,9 @@ public class DriveTrain {
     private DcMotor left_back_drive;
     private DcMotor right_front_drive;
     private DcMotor right_back_drive;
-    private PidRegulator PIDX = new PidRegulator(0.025, 0.0000001, 0.0000001);
+    private PidRegulator PIDX = new PidRegulator(0.015, 0.0000001, 0.0000001);
     private PidRegulator PIDY = new PidRegulator(0.025, 0.0000001, 0.0000001);
-    private PidRegulator PIDZ = new PidRegulator(0.012, 0, 0);
+    private PidRegulator PIDZ = new PidRegulator(0.015, 0, 0);
     double told;
     double crr = 24 * 20 / (9.8 * PI);
     private LinearOpMode opMode;
@@ -111,7 +111,7 @@ public class DriveTrain {
         double t = 0;
         double tr = t - told;
 
-        while (((abs(errx)) > 100 || (abs(erry)) > 100 || (abs(errz)) > 5) && tr < 5000 && opMode.opModeIsActive()) {
+        while (((abs(errx)) > 75 || (abs(erry)) > 75 || (abs(errz)) > 4) && tr < 5 && opMode.opModeIsActive()) {
             t = System.currentTimeMillis() / 1000.0;
             tr = t - t1;
             lfd = left_front_drive.getCurrentPosition();
@@ -143,7 +143,7 @@ public class DriveTrain {
             double powerz = PIDZ.update(errz);
 
 
-            setPowers(powerx,powery,powerz);
+            setPowers(Range.clip(powerx,-0.4,0.4),powery,powerz);
             told = t;
 
         }

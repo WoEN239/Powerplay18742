@@ -31,45 +31,54 @@ public class AutonomBeta extends LinearOpMode {
         telemetry.update();
         camera.stopcamera();
         graber.Target_Graber(true);
-        lift.setMotor(Lift.LiftPosition.MIDDLE);
-        lift.setMotor(Lift.LiftPosition.GROUND);
-        /*graber.Target_Graber(true);
         sleep(500);
-        driveTrain.setMotor3axes(80,0,0);
-        driveTrain.setMotor3axes(0, 0, -45);
+        driveTrain.setMotor3axes(62,0,0);
+        driveTrain.setMotor3axes(0, 0, -38);
         lift.setMotor(Lift.LiftPosition.UP);
-        driveTrain.setMotor3axes(30, 0, 0);
+        driveTrain.setMotor3axes(25, 0, 0);
+        sleep(2000);
         graber.Target_Graber(false);
         sleep(500);
-        driveTrain.setMotor3axes(-30, 0, 0);
+        driveTrain.setMotor3axes(-25, 0, 0);
         lift.setMotor(Lift.LiftPosition.ZERO);
-        driveTrain.setMotor3axes(0, 0, 45);
+        sleep(500);
+        driveTrain.setMotor3axes(0, 0, 38);
+        /*
         driveTrain.setMotor3axes(0, 0, 180);
-        driveTrain.setMotor3axes(55, 0, 0);
-        driveTrain.setMotor3axes(0, 0, -90);
+        driveTrain.setMotor3axes(60, 0, 0);
+        driveTrain.setMotor3axes(0, 0, 90);
         driveTrain.setMotor3axes(45, 0, 0);
         graber.Target_Graber(true);
         sleep(500);
         driveTrain.setMotor3axes(-45,0,0);
         driveTrain.setMotor3axes(0,0,-90);
-        driveTrain.setMotor3axes(45, 0, 0);
-        driveTrain.setMotor3axes(0, 0, -45);
+        driveTrain.setMotor3axes(60, 0, 0);
+        driveTrain.setMotor3axes(0, 0, -30);
         lift.setMotor(Lift.LiftPosition.UP);
-        driveTrain.setMotor3axes(10, 0, 0);
+        driveTrain.setMotor3axes(25, 0, 0);
         graber.Target_Graber(false);
         sleep(500);
-        driveTrain.setMotor3axes(-10, 0, 0);
-        driveTrain.setMotor3axes(0, 0, 45);
-       /* if(c==18){
-            driveTrain.setMotor3axes(0,-270,0);
+        driveTrain.setMotor3axes(-25, 0, 0);
+        driveTrain.setMotor3axes(0, 0, 30);
+
+        */
+        driveTrain.setMotor3axes(-10,0,0);
+        if(c==18){
+            driveTrain.setMotor3axes(0,0,90);
+            driveTrain.setMotor3axes(53,0,0);
+            driveTrain.setMotor3axes(0,0,-90);
         }
         if(c==6){
-            driveTrain.setMotor3axes(0,-90,0);
+            driveTrain.setMotor3axes(0,0,-90);
+            driveTrain.setMotor3axes(53,0,0);
+            driveTrain.setMotor3axes(0,0,90);
         }
+      while (opModeIsActive())
+          lightning.smooth();
 
 
 
-         */
+
     }
 
 }

@@ -104,22 +104,20 @@ public class Lift {
         PIDZL1.update(motorsY);
         PIDZL2.update(motorsY);
 
-        double t1 = System.currentTimeMillis() / 1000.0;
-        double t = 0;
-        double tr = t - told;
+        double t1 = (double) System.currentTimeMillis() / 1000.0;
+        double t;
+        double tr=0;
 
-        while (((abs(err1)) > 100 && (abs(err2)) > 100) && tr < 4000 && opMode.opModeIsActive()) {
-            t = System.currentTimeMillis() / 1000.0;
+        while (((abs(err1)) > 100 && (abs(err2)) > 100) && tr < 5 && opMode.opModeIsActive()) {
+            t = (double) System.currentTimeMillis() / 1000.0;
             tr = t - t1;
             l1 = motor1.getCurrentPosition();
             l2 = motor2.getCurrentPosition();
 
-            target1 = hight;
-            target2 = hight;
             err1 = target1 - l1;
             err2 = target2 - l2;
             double poweryl1 = PIDZL1.update(err1);
-            double poweryl2 = PIDZL1.update(err2);
+            double poweryl2 = PIDZL2.update(err2);
 
             motor1.setPower(poweryl1);
             motor2.setPower(poweryl2);
