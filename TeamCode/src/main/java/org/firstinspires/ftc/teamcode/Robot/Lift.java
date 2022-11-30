@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Lift {
     private DcMotor motor1;
     private DcMotor motor2;
-    private PidRegulator PIDZL1 = new PidRegulator(1.125 / 2, 0, 0);
-    private PidRegulator PIDZL2 = new PidRegulator(1.125 / 2, 0, 0);
+    private PidRegulator PIDZL1 = new PidRegulator(0.8125 / 251.5, 0, 0);
+    private PidRegulator PIDZL2 = new PidRegulator(0.8125 / 251.5, 0, 0);
     double told;
 
     private LinearOpMode opMode;

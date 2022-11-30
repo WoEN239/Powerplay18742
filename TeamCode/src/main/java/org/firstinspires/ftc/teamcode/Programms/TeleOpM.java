@@ -56,7 +56,7 @@ public class TeleOpM extends LinearOpMode {
                 lift.liftMode = Lift.LiftMode.AUTO;
                 lift.liftPosition = Lift.LiftPosition.LOW;
             }
-            if(gamepad1.dpad_down) {
+            if(gamepad1.dpad_right) {
                 lift.liftMode = Lift.LiftMode.AUTO;
                 lift.liftPosition = Lift.LiftPosition.MIDDLE;
             }
