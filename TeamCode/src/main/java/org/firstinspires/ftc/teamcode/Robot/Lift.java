@@ -154,6 +154,8 @@ public class Lift {
                 double err2 = target2 - l2;
                 double poweryl1 = PIDZL1.update(err1);
                 double poweryl2 = PIDZL2.update(err2);
+                motor1.setPower(poweryl1);
+                motor2.setPower(poweryl2);
                 break;
             case MANUALLIMIT:
                 setPowersLimit(power);
