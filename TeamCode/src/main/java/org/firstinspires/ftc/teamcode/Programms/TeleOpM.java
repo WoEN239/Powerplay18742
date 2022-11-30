@@ -33,6 +33,8 @@ public class TeleOpM extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
+        lightning.lightMode = Lightning.LightningMode.SMOOTH;
+        lift.liftPosition = Lift.LiftPosition.ZERO;
         while (opModeIsActive()) {
             boolean square = gamepad1.square;
             if (square && !oldsquare) {
@@ -42,65 +44,65 @@ public class TeleOpM extends LinearOpMode {
             graber.Target_Graber(graberPosition);
             boolean triangle = gamepad1.triangle;
             boolean cross = gamepad1.cross;
-            //if (gamepad1.touchpad_finger_1) {
-            //if() {
-            //    double c=lift.setMotorToZero(Lift.LiftPosition.ZERO);
-            //}
-            //}
-            if (gamepad1.left_trigger > 0.1) {
-                if (triangle) {
-                    lift.setPowers(1);
-                    lightning.smooth();
-                    liftpos = 1;
-                }
-                if (cross) {
-                    lift.setPowers(-1);
-                    lightning.smooth();
-                    liftpos = -1;
-                }
-                if (!triangle && !cross) {
-                    lift.setPowers(0);
-                    lightning.smooth();
-                    liftpos = 0;
-                }
-            } else {
-                if (triangle) {
-                    lift.setPowersLimit(1);
-                    lightning.smooth();
-                }
-                if (cross) {
-                    lift.setPowersLimit(-1);
-                    lightning.smooth();
-                }
-                if (!triangle && !cross) {
-                    lift.setPowersLimit(0);
-                    lightning.smooth();
-                }
-                double axial = -gamepad1.left_stick_y * speed;
-                double lateral = -gamepad1.left_stick_x * speed;
-                double yaw = -gamepad1.right_stick_x * speed;
-
-
-                if (gamepad1.right_trigger > 0.1 || (lift.encoders() > 130 && axial < 0)) {
-                    if (lift.encoders() > 700 && axial < 0) {
-                        axial /= 4.5;
-                        lateral /= 4.5;
-                        yaw /= 4.5;
-                    } else {
-                        axial /= 3.5;
-                        lateral /= 3.5;
-                        yaw /= 3.5;
-                    }
-
-                }
-
-                driveTrain.setPowers(axial, lateral, yaw);
-                oldsquare = square;
-                oldcircle = circle;
-                oldtriangle = triangle;
-                driveTrain.positionsEncodersXY();
-                telemetry.update();
+            if(gamepad1.dpad_down) {
+                lift.liftMode = Lift.LiftMode.AUTO;
+                lift.liftPosition = Lift.LiftPosition.ZERO;
             }
+            if(gamepad1.dpad_up) {
+                lift.liftMode = Lift.LiftMode.AUTO;
+                lift.liftPosition = Lift.LiftPosition.UP;
+            }
+            if(gamepad1.dpad_left) {
+                lift.liftMode = Lift.LiftMode.AUTO;
+                lift.liftPosition = Lift.LiftPosition.LOW;
+            }
+            if(gamepad1.dpad_down) {
+                lift.liftMode = Lift.LiftMode.AUTO;
+                lift.liftPosition = Lift.LiftPosition.MIDDLE;
+            }
+            if (gamepad1.left_trigger > 0.1) {
+                lift.liftMode = Lift.LiftMode.MANUAl;
+            } else if (triangle || cross) {
+                lift.liftMode = Lift.LiftMode.MANUALLIMIT;
+            }
+            if (triangle) {
+                lift.power = 1;
+            }
+            if (cross) {
+                lift.power = -1;
+            }
+            if (!triangle && !cross) {
+                lift.power = 0;
+            }
+
+            lift.update();
+
+            lightning.update();
+
+            double axial = -gamepad1.left_stick_y * speed;
+            double lateral = -gamepad1.left_stick_x * speed;
+            double yaw = -gamepad1.right_stick_x * speed;
+
+
+            if (gamepad1.right_trigger > 0.1 || (lift.encoders() > 130 && axial < 0)) {
+                if (lift.encoders() > 700 && axial < 0) {
+                    axial /= 4.5;
+                    lateral /= 4.5;
+                    yaw /= 4.5;
+                } else {
+                    axial /= 3.5;
+                    lateral /= 3.5;
+                    yaw /= 3.5;
+                }
+
+            }
+
+            driveTrain.setPowers(axial, lateral, yaw);
+            oldsquare = square;
+            oldcircle = circle;
+            oldtriangle = triangle;
+            driveTrain.positionsEncodersXY();
+            telemetry.update();
+        }
         }
     }
-}

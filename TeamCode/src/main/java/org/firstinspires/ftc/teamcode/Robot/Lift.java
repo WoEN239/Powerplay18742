@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.Robot;
 
-import static java.lang.Math.PI;
 import static java.lang.Math.abs;
-import static java.lang.Math.signum;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,11 +10,20 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Lift {
     private DcMotor motor1;
     private DcMotor motor2;
-    private PidRegulator PIDZL1 = new PidRegulator(1.125/2, 0, 0);
-    private PidRegulator PIDZL2 = new PidRegulator(1.125/2, 0, 0);
+    private PidRegulator PIDZL1 = new PidRegulator(1.125 / 2, 0, 0);
+    private PidRegulator PIDZL2 = new PidRegulator(1.125 / 2, 0, 0);
     double told;
 
     private LinearOpMode opMode;
+
+    public double power = 0;
+    public LiftPosition liftPosition = LiftPosition.ZERO;
+
+    public enum LiftMode {
+        AUTO, MANUAl, MANUALLIMIT;
+    }
+
+    public LiftMode liftMode = LiftMode.AUTO;
 
     public Lift(HardwareMap hardwareMap, LinearOpMode _opMode) {
         opMode = _opMode;
@@ -28,7 +35,7 @@ public class Lift {
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-   public void reset() {
+    public void reset() {
         motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -39,6 +46,13 @@ public class Lift {
     public void setPowers(double x) {
         motor1.setPower(x);
         motor2.setPower(x);
+    }
+
+    public double encoders() {
+        double m1 = motor1.getCurrentPosition();
+        double m2 = motor2.getCurrentPosition();
+        double m0 = (m1 + m2) / 2;
+        return m0;
     }
 
     public enum LiftPosition {
@@ -127,5 +141,26 @@ public class Lift {
         motor1.setPower(0);
         motor2.setPower(0);
 
+    }
+
+    public void update() {
+        switch (liftMode) {
+            case AUTO:
+                double target1=liftPosition.value;
+                double target2= liftPosition.value;
+                double l1 = motor1.getCurrentPosition();
+                double l2 = motor2.getCurrentPosition();
+                double err1 = target1 - l1;
+                double err2 = target2 - l2;
+                double poweryl1 = PIDZL1.update(err1);
+                double poweryl2 = PIDZL2.update(err2);
+                break;
+            case MANUALLIMIT:
+                setPowersLimit(power);
+                break;
+            case MANUAl:
+                setPowers(power);
+                break;
+        }
     }
 }
