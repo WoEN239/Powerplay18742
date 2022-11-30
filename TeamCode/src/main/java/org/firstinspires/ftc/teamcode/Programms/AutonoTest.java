@@ -20,13 +20,15 @@ public class AutonoTest extends LinearOpMode {
         lightning = new Lightning(hardwareMap);
         lift.reset();
         waitForStart();
-        lift.reset();
+        /*lift.reset();
         sleep(500);
         lift.setMotor(Lift.LiftPosition.UP);
         sleep(500);
         lift.setMotor(Lift.LiftPosition.ZERO);
         sleep(500);
 
+
+         */
 
 
 

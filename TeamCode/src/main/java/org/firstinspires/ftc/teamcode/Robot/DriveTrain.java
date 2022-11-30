@@ -27,6 +27,7 @@ public class DriveTrain {
     double crr = 24 * 20 / (9.8 * PI);
     private LinearOpMode opMode;
     double targetangle = 0;
+    double xold = 0, yold = 0;
 
     public DriveTrain(HardwareMap hardwareMap, LinearOpMode _opMode) {
         opMode = _opMode;
@@ -45,11 +46,10 @@ public class DriveTrain {
         left_front_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_back_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_front_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        reset();
     }
 
     public void reset() {
-
         left_front_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         left_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         left_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -60,10 +60,35 @@ public class DriveTrain {
         right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    public double xPosition() {
+        double lfd = left_front_drive.getCurrentPosition();
+        double lbd = left_back_drive.getCurrentPosition();
+        double rfd = right_front_drive.getCurrentPosition();
+        double rbd = right_back_drive.getCurrentPosition();
+        double x = ((lfd + lbd + rfd + rbd) / 4) / crr;
+        return x;
+    }
+
+    public double yPosition() {
+        double lfd = left_front_drive.getCurrentPosition();
+        double lbd = left_back_drive.getCurrentPosition();
+        double rfd = right_front_drive.getCurrentPosition();
+        double rbd = right_back_drive.getCurrentPosition();
+        double y = ((-lfd + lbd + rfd - rbd) / 4) / crr;
+        return y;
+    }
+
+    public void positionsEncodersXY() {
+        double x = xPosition();
+        double y = yPosition();
+        opMode.telemetry.addData("x", x);
+        opMode.telemetry.addData("y", y);
+    }
+
     public void setPowers(double x, double y, double z) {
-        x = Range.clip(x, -1 ,1) ;
-        y = Range.clip(y, -1 ,1) ;
-        z = Range.clip(z, -1 ,1) ;
+        x = Range.clip(x, -1, 1);
+        y = Range.clip(y, -1, 1);
+        z = Range.clip(z, -1, 1);
         double leftFrontMotorPower = x - y - z;
         double rightFrontMotorPower = x + y + z;
         double leftRearMotorPower = x + y - z;
