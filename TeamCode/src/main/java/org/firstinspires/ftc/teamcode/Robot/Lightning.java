@@ -16,10 +16,11 @@ public class Lightning {
     }
 
     public LightningMode lightMode = LightningMode.OFF;
-
-    public Lightning(HardwareMap hardwareMap) {
-        svet1 = hardwareMap.dcMotor.get("svet1");
-        svet2 = hardwareMap.dcMotor.get("svet2");
+AiRRobot aiRRobot;
+    public Lightning(AiRRobot robot) {
+        aiRRobot=robot;
+        svet1 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("svet1");
+        svet2 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("svet2");
         svet1.setDirection(DcMotorSimple.Direction.FORWARD);
         svet2.setDirection(DcMotorSimple.Direction.FORWARD);
     }

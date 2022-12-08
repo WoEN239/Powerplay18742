@@ -29,14 +29,15 @@ public class Odometry {
     double rfdold = 0;
     double rbdold = 0;
     LinearOpMode linearOpMode1;
-    public Odometry(LinearOpMode linearOpMode) {
-        linearOpMode1=linearOpMode;
-        gyro = linearOpMode.hardwareMap.get(BNO055IMU.class, "imu");
+    AiRRobot aiRRobot;
+    public Odometry(AiRRobot robot) {
+        aiRRobot=robot;
+        gyro = aiRRobot.linearOpMode.hardwareMap.get(BNO055IMU.class, "imu");
 
-        left_front_drive = linearOpMode.hardwareMap.dcMotor.get("left_front_drive");
-        left_back_drive = linearOpMode.hardwareMap.dcMotor.get("left_back_drive");
-        right_front_drive = linearOpMode.hardwareMap.dcMotor.get("right_front_drive");
-        right_back_drive = linearOpMode.hardwareMap.dcMotor.get("right_back_drive");
+        left_front_drive = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("left_front_drive");
+        left_back_drive = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("left_back_drive");
+        right_front_drive = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("right_front_drive");
+        right_back_drive = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("right_back_drive");
 
 
         left_front_drive.setDirection(DcMotor.Direction.FORWARD);

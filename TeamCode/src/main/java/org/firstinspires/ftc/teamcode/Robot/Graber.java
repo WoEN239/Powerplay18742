@@ -5,9 +5,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Graber {
     Servo servo;
-
-    public Graber(HardwareMap hardwareMap) {
-        servo = hardwareMap.get(Servo.class, "Servo");
+    AiRRobot aiRRobot;
+    public Graber(AiRRobot robot) {
+        aiRRobot=robot;
+        servo = aiRRobot.linearOpMode.hardwareMap.get(Servo.class, "Servo");
     }
 
     public void Target_Graber(boolean triang) {

@@ -13,8 +13,8 @@ public class Lift {
     private PidRegulator PIDZL1 = new PidRegulator(0.8125 / 251.5, 0, 0);
     private PidRegulator PIDZL2 = new PidRegulator(0.8125 / 251.5, 0, 0);
     double told;
-
-    private LinearOpMode opMode;
+   double err1=0;
+   double err2=0;
 
     public double power = 0;
     public LiftPosition liftPosition = LiftPosition.ZERO;
@@ -24,11 +24,11 @@ public class Lift {
     }
 
     public LiftMode liftMode = LiftMode.AUTO;
-
-    public Lift(HardwareMap hardwareMap, LinearOpMode _opMode) {
-        opMode = _opMode;
-        motor1 = hardwareMap.dcMotor.get("motor1");
-        motor2 = hardwareMap.dcMotor.get("motor2");
+    AiRRobot aiRRobot;
+    public Lift(AiRRobot robot) {
+        robot = aiRRobot;
+        motor1 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("motor1");
+        motor2 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("motor2");
         motor1.setDirection(DcMotorSimple.Direction.REVERSE);
         motor2.setDirection(DcMotorSimple.Direction.FORWARD);
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -97,9 +97,9 @@ public class Lift {
     }
 
     public void displayEncoders() {
-        opMode.telemetry.addData("lift1", motor1.getCurrentPosition());
-        opMode.telemetry.addData("lift2", motor2.getCurrentPosition());
-        opMode.telemetry.update();
+        aiRRobot.linearOpMode.telemetry.addData("lift1", motor1.getCurrentPosition());
+        aiRRobot.linearOpMode.telemetry.addData("lift2", motor2.getCurrentPosition());
+        aiRRobot.linearOpMode.telemetry.update();
     }
 
     public void setMotor(LiftPosition position) {
@@ -122,20 +122,11 @@ public class Lift {
         double t;
         double tr=0;
 
-        while (((abs(err1)) > 100 && (abs(err2)) > 100) && tr < 5 && opMode.opModeIsActive()) {
-            t = (double) System.currentTimeMillis() / 1000.0;
-            tr = t - t1;
-            l1 = motor1.getCurrentPosition();
-            l2 = motor2.getCurrentPosition();
-
-            err1 = target1 - l1;
-            err2 = target2 - l2;
-            double poweryl1 = PIDZL1.update(err1);
-            double poweryl2 = PIDZL2.update(err2);
-
-            motor1.setPower(poweryl1);
-            motor2.setPower(poweryl2);
-            told = t;
+        while (!isAtPosiotoin() && tr < 5 && aiRRobot.linearOpMode.opModeIsActive()) {
+            t=(double) System.currentTimeMillis() / 1000.0;
+            tr=t-t1;
+            liftMode=LiftMode.AUTO;
+            update();
 
         }
         motor1.setPower(0);
@@ -150,8 +141,8 @@ public class Lift {
                 double target2= liftPosition.value;
                 double l1 = motor1.getCurrentPosition();
                 double l2 = motor2.getCurrentPosition();
-                double err1 = target1 - l1;
-                double err2 = target2 - l2;
+                err1 = target1 - l1;
+                err2 = target2 - l2;
                 double poweryl1 = PIDZL1.update(err1);
                 double poweryl2 = PIDZL2.update(err2);
                 motor1.setPower(poweryl1);
@@ -164,5 +155,11 @@ public class Lift {
                 setPowers(power);
                 break;
         }
+    }
+    public boolean isAtPosiotoin() {
+        if(abs(err1)<5 && abs(err2)<5)
+            return true;
+        else
+            return false;
     }
 }
