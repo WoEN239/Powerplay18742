@@ -10,6 +10,7 @@ import static java.lang.Math.toRadians;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
@@ -44,10 +45,10 @@ public class DriveTrain {
         left_back_drive = robot.linearOpMode.hardwareMap.dcMotor.get("left_back_drive");
         right_front_drive = robot.linearOpMode.hardwareMap.dcMotor.get("right_front_drive");
         right_back_drive = robot.linearOpMode.hardwareMap.dcMotor.get("right_back_drive");
-        left_front_drive.setDirection(DcMotor.Direction.FORWARD);
-        left_back_drive.setDirection(DcMotor.Direction.FORWARD);
-        right_front_drive.setDirection(DcMotor.Direction.REVERSE);
-        right_back_drive.setDirection(DcMotor.Direction.REVERSE);
+        left_front_drive.setDirection(DcMotor.Direction.REVERSE);
+        left_back_drive.setDirection(DcMotor.Direction.REVERSE);
+        right_front_drive.setDirection(DcMotor.Direction.FORWARD);
+        right_back_drive.setDirection(DcMotor.Direction.FORWARD);
         left_back_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left_front_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_back_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
