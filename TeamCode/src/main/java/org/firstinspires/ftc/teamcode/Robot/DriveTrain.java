@@ -10,8 +10,6 @@ import static java.lang.Math.toRadians;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -169,7 +167,7 @@ public class DriveTrain {
 
             opMode.telemetry.addData("angel", angle);
             opMode.telemetry.update();
-
+            aiRRobot.odometry.update();
             double powerx = PIDX.update(errx);
             double powery = PIDY.update(erry);
             double powerz = PIDZ.update(errz);
