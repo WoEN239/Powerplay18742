@@ -137,8 +137,8 @@ public class Lift {
     public void update() {
         switch (liftMode) {
             case AUTO:
-                double target1=liftPosition.value;
-                double target2= liftPosition.value;
+                double target1 = liftPosition.value;
+                double target2 = liftPosition.value;
                 double l1 = motor1.getCurrentPosition();
                 double l2 = motor2.getCurrentPosition();
                 err1 = target1 - l1;
