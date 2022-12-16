@@ -7,6 +7,7 @@ import static java.lang.Math.signum;
 import static java.lang.Math.sin;
 import static java.lang.Math.toRadians;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,20 +18,26 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
+@Config
 public class DriveTrain {
     BNO055IMU gyro;
     private DcMotor left_front_drive;
     private DcMotor left_back_drive;
     private DcMotor right_front_drive;
     private DcMotor right_back_drive;
-    private PidRegulator PIDX = new PidRegulator(0.015, 0.0000001, 0.0000001);
-    private PidRegulator PIDY = new PidRegulator(0.025, 0.0000001, 0.0000001);
-    private PidRegulator PIDZ = new PidRegulator(0.015, 0, 0);
-    private PidRegulator PIDFIELDX = new PidRegulator(0.015, 0.0000001, 0.0000001);
-    private PidRegulator PIDFIELDY = new PidRegulator(0.015, 0.0000001, 0.0000001);
+    private PidRegulator PIDX = new PidRegulator(kPdrive, kIdrive, kDdrive);
+    private PidRegulator PIDY = new PidRegulator(kPdrive, kIdrive, kDdrive);
+    private PidRegulator PIDZ = new PidRegulator(kProtation, kIrotation, kDrotation);
+    private PidRegulator PIDFIELDX = new PidRegulator(kPdrive, kIdrive, kDdrive);
+    private PidRegulator PIDFIELDY = new PidRegulator(kPdrive, kIdrive, kDdrive);
+    public static double kPdrive = 0.01;
+    public static double kIdrive = 0.015;
+    public static double kDdrive = 0;
+    public static double kProtation = 0.025;
+    public static double kIrotation = 0.00001;
+    public static double kDrotation = 0;
     double told;
     double crr = 24 * 20 / (9.8 * PI);
-    private LinearOpMode opMode;
     double targetangle = 0;
     double xold = 0, yold = 0;
     AiRRobot aiRRobot;
@@ -87,8 +94,6 @@ public class DriveTrain {
     public void positionsEncodersXY() {
         double x = xPosition();
         double y = yPosition();
-        opMode.telemetry.addData("x", x);
-        opMode.telemetry.addData("y", y);
     }
 
     public void setPowers(double x, double y, double z) {
@@ -105,12 +110,14 @@ public class DriveTrain {
         right_back_drive.setPower(rightRearMotorPower);
     }
 
-    public void displayEncoders() {
+  /*  public void displayEncoders() {
         opMode.telemetry.addData("lfd", left_front_drive.getCurrentPosition());
         opMode.telemetry.addData("lrd", left_back_drive.getCurrentPosition());
         opMode.telemetry.addData("rfd", right_front_drive.getCurrentPosition());
         opMode.telemetry.addData("rrd", right_back_drive.getCurrentPosition());
+
     }
+   */
 
 
     public void setMotor3axes(double x, double y, double z) {
@@ -166,8 +173,6 @@ public class DriveTrain {
 
             }
 
-            opMode.telemetry.addData("angel", angle);
-            opMode.telemetry.update();
 
             double powerx = PIDX.update(errx);
             double powery = PIDY.update(erry);
@@ -194,18 +199,20 @@ public class DriveTrain {
     }
 
     public void setFieldPosition(double x, double y, double heading) {
-
-        double errx = aiRRobot.odometry.x;
-        double erry = aiRRobot.odometry.y;
-        targetangle = targetangle + heading;
-        double errz = targetangle - gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+        PIDFIELDX.reset();
+        PIDFIELDY.reset();
+        PIDZ.reset();
+        double errx = x-aiRRobot.odometry.x;
+        double erry = y-aiRRobot.odometry.y;
+        targetangle=heading;
+        double errz = targetangle - aiRRobot.odometry.heading;
 
         while (abs(errz) > 180) {
             errz -= 360 * signum(errz);
 
         }
-        PIDX.update(errx);
-        PIDY.update(erry);
+        PIDFIELDX.update(errx);
+        PIDFIELDY.update(erry);
         PIDZ.update(errz);
         double t1 = System.currentTimeMillis() / 1000.0;
         double t = 0;
@@ -215,9 +222,8 @@ public class DriveTrain {
             t = System.currentTimeMillis() / 1000.0;
             tr = t - t1;
 
-
-            errx = aiRRobot.odometry.x;
-            erry = aiRRobot.odometry.y;
+            errx = x-aiRRobot.odometry.x;
+            erry = y-aiRRobot.odometry.y;
             errz = targetangle - aiRRobot.odometry.heading;
             while (abs(errz) > 180) {
                 errz -= 360 * signum(errz);
@@ -230,7 +236,7 @@ public class DriveTrain {
             double powery = PIDFIELDY.update(erry);
             double powerz = PIDZ.update(errz);
 
-            setPowersField(Range.clip(powerx, -0.4, 0.4), powery, powerz);
+            setPowersField(Range.clip(powerx, -1, 1), Range.clip(powery, -1, 1), Range.clip(powerz, -1, 1));
             told = t;
 
         }
@@ -244,8 +250,8 @@ public class DriveTrain {
 
     public void setPowersField(double x, double y, double heading) {
         double angle = aiRRobot.odometry.heading;
-        double powersX = x * cos(toRadians(-angle)) + y * sin(toRadians(-angle));
-        double powersY = -x * sin(toRadians(-angle)) + y * cos(toRadians(-angle));
+        double powersX = x * cos(toRadians(angle)) + y * sin(toRadians(angle));
+        double powersY = -x * sin(toRadians(angle)) + y * cos(toRadians(angle));
         setPowers(powersX, powersY, heading);
     }
 }

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Programms;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.Robot.AiRRobot;
 import org.firstinspires.ftc.teamcode.Robot.Camera;
 import org.firstinspires.ftc.teamcode.Robot.DriveTrain;
 import org.firstinspires.ftc.teamcode.Robot.Graber;
@@ -11,14 +12,11 @@ import org.firstinspires.ftc.teamcode.Robot.Lightning;
 
 @Autonomous
 public class AutonomBetaMirror extends LinearOpMode {
-    DriveTrain driveTrain;
-    Graber graber;
-    Lift lift;
-    Camera camera;
-    Lightning lightning;
+    AiRRobot aiRRobot;
 
     public void runOpMode() {
-        driveTrain = new DriveTrain(hardwareMap, this);
+        aiRRobot=new AiRRobot(this);
+        /*driveTrain = new DriveTrain(hardwareMap, this);
         graber = new Graber(hardwareMap);
         lift = new Lift(hardwareMap, this);
         lightning = new Lightning(hardwareMap);
@@ -61,15 +59,6 @@ public class AutonomBetaMirror extends LinearOpMode {
         driveTrain.setMotor3axes(0, 0, 30);
 
         */
-        driveTrain.setMotor3axes(-10,0,0);
-        if(c==18){
-            driveTrain.setMotor3axes(0,0,90);
-            driveTrain.setMotor3axes(60,0,0);
-        }
-        if(c==6){
-            driveTrain.setMotor3axes(0,0,-90);
-            driveTrain.setMotor3axes(60,0,0);
-        }
 
 
 

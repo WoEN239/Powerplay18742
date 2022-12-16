@@ -43,7 +43,7 @@ public class TeleOpM extends LinearOpMode {
             aiRRobot.graber.Target_Graber(graberPosition);
             boolean triangle = gamepad1.triangle;
             boolean cross = gamepad1.cross;
-            if (gamepad1.dpad_down) {
+            /*if (gamepad1.dpad_down) {
                 aiRRobot.lift.liftMode = Lift.LiftMode.AUTO;
                 aiRRobot.lift.liftPosition = Lift.LiftPosition.ZERO;
             }
@@ -59,28 +59,29 @@ public class TeleOpM extends LinearOpMode {
                 aiRRobot.lift.liftMode = Lift.LiftMode.AUTO;
                 aiRRobot.lift.liftPosition = Lift.LiftPosition.MIDDLE;
             }
+
+             */
             if (gamepad1.left_trigger > 0.1) {
                 aiRRobot.lift.liftMode = Lift.LiftMode.MANUAl;
             } else if (triangle || cross) {
                 aiRRobot.lift.liftMode = Lift.LiftMode.MANUALLIMIT;
             }
             if (triangle) {
-                aiRRobot.lift.power = 1;
+                aiRRobot.lift.power = 0.6;
             }
             if (cross) {
-                aiRRobot.lift.power = -1;
+                aiRRobot.lift.power = -0.15;
             }
             if (!triangle && !cross) {
-                aiRRobot.lift.power = 0;
+                aiRRobot.lift.power = 0.1;
             }
             aiRRobot.odometry.update();
             aiRRobot.lift.update();
 
 
             aiRRobot.odometry.update();
-            telemetry.addData("x", aiRRobot.odometry.x);
+           telemetry.addData("x", aiRRobot.odometry.x);
             telemetry.addData("y", aiRRobot.odometry.y);
-            aiRRobot.driveTrain.displayEncoders();
             telemetry.addData("heading", aiRRobot.odometry.heading);
             aiRRobot.lightning.update();
 

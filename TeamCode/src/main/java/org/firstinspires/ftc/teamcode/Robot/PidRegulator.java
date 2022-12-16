@@ -29,6 +29,9 @@ public class PidRegulator {
         errold = err;
         told = time;
         return up + ud + ui;
-
+    }
+    public void reset(){
+        ui=0;
+        told=System.currentTimeMillis()/1000.0;
     }
 }

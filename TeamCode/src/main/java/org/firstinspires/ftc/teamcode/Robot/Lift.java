@@ -26,11 +26,11 @@ public class Lift {
     public LiftMode liftMode = LiftMode.AUTO;
     AiRRobot aiRRobot;
     public Lift(AiRRobot robot) {
-        robot = aiRRobot;
+        aiRRobot=robot;
         motor1 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("motor1");
         motor2 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("motor2");
-        motor1.setDirection(DcMotorSimple.Direction.REVERSE);
-        motor2.setDirection(DcMotorSimple.Direction.FORWARD);
+        motor1.setDirection(DcMotorSimple.Direction.FORWARD);
+        motor2.setDirection(DcMotorSimple.Direction.REVERSE);
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }

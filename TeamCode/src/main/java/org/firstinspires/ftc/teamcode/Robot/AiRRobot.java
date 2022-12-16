@@ -17,6 +17,7 @@ public class AiRRobot {
         lift = new Lift(this);
         graber = new Graber(this);
         lightning = new Lightning(this);
+        odometry = new Odometry(this);
     }
     public void allUpdate(){
         lift.update();

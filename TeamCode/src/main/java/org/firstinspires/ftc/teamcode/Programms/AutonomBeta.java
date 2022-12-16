@@ -12,10 +12,18 @@ import org.firstinspires.ftc.teamcode.Robot.Lightning;
 
 @Autonomous
 public class AutonomBeta extends LinearOpMode {
-      AiRRobot aiRRobot;
+    AiRRobot aiRRobot;
 
     public void runOpMode() {
-
+        aiRRobot = new AiRRobot(this);
+        waitForStart();
+        aiRRobot.lightning.lightMode= Lightning.LightningMode.SMOOTH;
+        aiRRobot.lightning.update();
+        aiRRobot.driveTrain.setFieldPosition(124,0,0);
+        aiRRobot.driveTrain.setFieldPosition(124,-15,0);
+        aiRRobot.driveTrain.setFieldPosition(124,-15,-29);
+        aiRRobot.driveTrain.setFieldPosition(124,0,90);
+        //aiRRobot.driveTrain.setFieldPosition(124,-4,0);
        /* lift.reset();
         waitForStart();
         lift.reset();
@@ -73,7 +81,6 @@ public class AutonomBeta extends LinearOpMode {
 
 */
     }
-
 
 
 }

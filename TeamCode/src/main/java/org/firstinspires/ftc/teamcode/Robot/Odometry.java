@@ -53,15 +53,13 @@ public class Odometry {
         int lbd = left_back_drive.getCurrentPosition();
         int rfd = right_front_drive.getCurrentPosition();
         int rbd = right_back_drive.getCurrentPosition();
-        double angle = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+        double angle = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle;
 
         double deltaX = xPosition(lfd - lfdold, lbd - lbdold, rfd - rfdold, rbd - rbdold);
         double deltaY = yPosition(lfd - lfdold, lbd - lbdold, rfd - rfdold, rbd - rbdold);
 
         x += deltaX * cos(toRadians(-angle)) + deltaY * sin(toRadians(-angle));
         y += -deltaX * sin(toRadians(-angle)) + deltaY * cos(toRadians(-angle));
-        linearOpMode1.telemetry.addData("deltaX",deltaX);
-        linearOpMode1.telemetry.addData("deltaY",deltaY);
         heading = angle;
         lfdold = lfd;
         lbdold = lbd;

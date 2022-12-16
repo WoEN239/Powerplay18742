@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Programms;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.Robot.AiRRobot;
 import org.firstinspires.ftc.teamcode.Robot.Camera;
 import org.firstinspires.ftc.teamcode.Robot.DriveTrain;
 import org.firstinspires.ftc.teamcode.Robot.Graber;
@@ -12,13 +13,11 @@ import org.firstinspires.ftc.teamcode.Robot.Lightning;
 @Autonomous
 public class AutonoTest extends LinearOpMode {
 
-    Lift lift;
-    Lightning lightning;
+    AiRRobot aiRRobot;
 
     public void runOpMode() {
-        lift = new Lift(hardwareMap, this);
-        lightning = new Lightning(hardwareMap);
-        lift.reset();
+       aiRRobot = new AiRRobot(this);
+       aiRRobot.lift.reset();
         waitForStart();
         /*lift.reset();
         sleep(500);
