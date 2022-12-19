@@ -20,7 +20,9 @@ public class TeleOpM extends LinearOpMode {
 
     double liftpos = 0;
 
+    boolean oldbumer=false;
     AiRRobot aiRRobot;
+    boolean speedcontrol=false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -37,20 +39,25 @@ public class TeleOpM extends LinearOpMode {
             if (square && !oldsquare) {
                 graberPosition = !graberPosition;
             }
+            if(gamepad1.ps){
+                aiRRobot.lift.reset();
+            }
 
 
             boolean circle = gamepad1.circle;
             aiRRobot.graber.Target_Graber(graberPosition);
             boolean triangle = gamepad1.triangle;
             boolean cross = gamepad1.cross;
-            /*if (gamepad1.dpad_down) {
+            if (gamepad1.dpad_down) {
                 aiRRobot.lift.liftMode = Lift.LiftMode.AUTO;
                 aiRRobot.lift.liftPosition = Lift.LiftPosition.ZERO;
             }
-            if (gamepad1.dpad_up) {
+
+            /*if (gamepad1.dpad_up) {
                 aiRRobot.lift.liftMode = Lift.LiftMode.AUTO;
                 aiRRobot.lift.liftPosition = Lift.LiftPosition.UP;
             }
+            */
             if (gamepad1.dpad_left) {
                 aiRRobot.lift.liftMode = Lift.LiftMode.AUTO;
                 aiRRobot.lift.liftPosition = Lift.LiftPosition.LOW;
@@ -60,7 +67,6 @@ public class TeleOpM extends LinearOpMode {
                 aiRRobot.lift.liftPosition = Lift.LiftPosition.MIDDLE;
             }
 
-             */
             if (gamepad1.left_trigger > 0.1) {
                 aiRRobot.lift.liftMode = Lift.LiftMode.MANUAl;
             } else if (triangle || cross) {
@@ -70,7 +76,7 @@ public class TeleOpM extends LinearOpMode {
                 aiRRobot.lift.power = 0.6;
             }
             if (cross) {
-                aiRRobot.lift.power = -0.15;
+                aiRRobot.lift.power = -0.1;
             }
             if (!triangle && !cross) {
                 aiRRobot.lift.power = 0.1;
@@ -83,26 +89,20 @@ public class TeleOpM extends LinearOpMode {
            telemetry.addData("x", aiRRobot.odometry.x);
             telemetry.addData("y", aiRRobot.odometry.y);
             telemetry.addData("heading", aiRRobot.odometry.heading);
+            telemetry.addData("motor1", aiRRobot.lift.motor1.getCurrentPosition());
+            telemetry.addData("motor2",aiRRobot.lift.motor2.getCurrentPosition());
             aiRRobot.lightning.update();
 
             double axial = -gamepad1.left_stick_y * speed;
             double lateral = -gamepad1.left_stick_x * speed;
             double yaw = -gamepad1.right_stick_x * speed;
 
-            if (gamepad1.right_trigger > 0.1 || (aiRRobot.lift.encoders() > 130 && axial < 0)) {
-                if(aiRRobot.lift.encoders() > 1600 && axial < 0) {
-                    axial /= 4.5;
-                    lateral /= 4.5;
-                    yaw /= 4.5;
-                } else {
-                    axial /= 3.5;
-                    lateral /= 3.5;
-                    yaw /= 3.5;
-                }
-
+            if(gamepad1.right_bumper) {
+                axial /= 3;
+                lateral /= 3;
+                yaw /= 3;
             }
-
-
+            oldbumer=gamepad1.right_bumper;
             aiRRobot.driveTrain.setPowers(axial, lateral, yaw);
             oldsquare = square;
             oldcircle = circle;

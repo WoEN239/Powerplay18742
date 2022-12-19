@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Robot;
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.cos;
+import static java.lang.Math.max;
 import static java.lang.Math.signum;
 import static java.lang.Math.sin;
 import static java.lang.Math.toRadians;
@@ -30,11 +31,11 @@ public class DriveTrain {
     private PidRegulator PIDZ = new PidRegulator(kProtation, kIrotation, kDrotation);
     private PidRegulator PIDFIELDX = new PidRegulator(kPdrive, kIdrive, kDdrive);
     private PidRegulator PIDFIELDY = new PidRegulator(kPdrive, kIdrive, kDdrive);
-    public static double kPdrive = 0.01;
-    public static double kIdrive = 0.015;
+    public static double kPdrive = 0.05;
+    public static double kIdrive = 0.055;
     public static double kDdrive = 0;
-    public static double kProtation = 0.025;
-    public static double kIrotation = 0.00001;
+    public static double kProtation = 0.04;
+    public static double kIrotation = 0.01;
     public static double kDrotation = 0;
     double told;
     double crr = 24 * 20 / (9.8 * PI);
@@ -97,13 +98,21 @@ public class DriveTrain {
     }
 
     public void setPowers(double x, double y, double z) {
-        x = Range.clip(x, -1, 1);
-        y = Range.clip(y, -1, 1);
-        z = Range.clip(z, -1, 1);
+        y *= 1.2;
         double leftFrontMotorPower = x - y - z;
         double rightFrontMotorPower = x + y + z;
         double leftRearMotorPower = x + y - z;
         double rightRearMotorPower = x - y + z;
+        double biggestPower = 0;
+
+        if (abs(leftFrontMotorPower) > 1 || abs(leftRearMotorPower) > 1 || abs(rightFrontMotorPower) > 1 || abs(rightRearMotorPower) > 1) {
+            biggestPower = max(max(abs(leftFrontMotorPower), abs(leftRearMotorPower)), max(abs(rightFrontMotorPower), abs(rightRearMotorPower)));
+            leftFrontMotorPower /= biggestPower;
+            leftRearMotorPower /= biggestPower;
+            rightFrontMotorPower /= biggestPower;
+            rightRearMotorPower /= biggestPower;
+        }
+
         left_front_drive.setPower(leftFrontMotorPower);
         left_back_drive.setPower(leftRearMotorPower);
         right_front_drive.setPower(rightFrontMotorPower);
@@ -159,7 +168,6 @@ public class DriveTrain {
 
 
             double angle = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
-
             motorsX = (lfd + lbd + rfd + rbd) / 4;
             motorsY = (-lfd + lbd + rfd - rbd) / 4;
             //motorsZ = (-lfd - lbd + rfd + rbd) / 4;
@@ -178,7 +186,11 @@ public class DriveTrain {
             double powery = PIDY.update(erry);
             double powerz = PIDZ.update(errz);
 
-
+            if (t < 0.5) {
+                powerx = t/500*powerx;
+                powery = t/500*powery;
+                powerz = t=500*powerz;
+            }
             setPowers(Range.clip(powerx, -0.4, 0.4), powery, powerz);
             told = t;
 
@@ -202,9 +214,9 @@ public class DriveTrain {
         PIDFIELDX.reset();
         PIDFIELDY.reset();
         PIDZ.reset();
-        double errx = x-aiRRobot.odometry.x;
-        double erry = y-aiRRobot.odometry.y;
-        targetangle=heading;
+        double errx = x - aiRRobot.odometry.x;
+        double erry = y - aiRRobot.odometry.y;
+        targetangle = heading;
         double errz = targetangle - aiRRobot.odometry.heading;
 
         while (abs(errz) > 180) {
@@ -222,21 +234,25 @@ public class DriveTrain {
             t = System.currentTimeMillis() / 1000.0;
             tr = t - t1;
 
-            errx = x-aiRRobot.odometry.x;
-            erry = y-aiRRobot.odometry.y;
+            errx = x - aiRRobot.odometry.x;
+            erry = y - aiRRobot.odometry.y;
             errz = targetangle - aiRRobot.odometry.heading;
             while (abs(errz) > 180) {
                 errz -= 360 * signum(errz);
 
             }
 
-           aiRRobot.odometry.update();
+            aiRRobot.odometry.update();
 
             double powerx = PIDFIELDX.update(errx);
             double powery = PIDFIELDY.update(erry);
             double powerz = PIDZ.update(errz);
-
-            setPowersField(Range.clip(powerx, -1, 1), Range.clip(powery, -1, 1), Range.clip(powerz, -1, 1));
+            if (t < 0.5) {
+                powerx = t/500*powerx;
+                powery = t/500*powery;
+                powerz = t=500*powerz;
+            }
+            setPowersField(Range.clip(powerx, -0.8, 0.8), Range.clip(powery, -0.8, 0.8), Range.clip(powerz, -0.8, 0.8));
             told = t;
 
         }
