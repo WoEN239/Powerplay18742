@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Graber {
     Servo servo;
+    Servo servo1;
     AiRRobot aiRRobot;
     boolean pos = false;
 
@@ -13,6 +14,7 @@ public class Graber {
     public Graber(AiRRobot robot) {
         aiRRobot = robot;
         servo = aiRRobot.linearOpMode.hardwareMap.get(Servo.class, "Servo");
+        servo1 = aiRRobot.linearOpMode.hardwareMap.get(Servo.class,"Servo1");
     }
 
     public void Target_Graber(boolean triang) {
@@ -21,9 +23,10 @@ public class Graber {
         }
         if (triang) {
             servo.setPosition(0.759);
+            servo1.setPosition(0);
         } else {
             servo.setPosition(0.97);
-
+            servo.setPosition(0.25);
         }
         pos = triang;
     }

@@ -5,25 +5,19 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp
-public class Program2  extends LinearOpMode {
+
+public class Volodya2 extends LinearOpMode {
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
     private DcMotor motor1 = null;
     private DcMotor motor2 = null;
-    private DcMotor svet = null;
-    private DcMotor svet1 = null;
     Servo servo;
+
     boolean oldsquare = false;
     double square_angle = 0;
-    double circle_angle = 1;
-    boolean oldcircle = false;
     boolean oldtriangle = false;
-    double triangle_angle = 0;
-    double n = 0;
-    double count = 1;
-
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -33,8 +27,6 @@ public class Program2  extends LinearOpMode {
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
         motor1 = hardwareMap.get(DcMotor.class, "motor1");
         motor2 = hardwareMap.get(DcMotor.class, "motor2");
-        svet = hardwareMap.get(DcMotor.class, "svet1");
-        svet1 = hardwareMap.get(DcMotor.class, "svet2");
         servo = hardwareMap.get(Servo.class, "Servo");
 
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -43,8 +35,6 @@ public class Program2  extends LinearOpMode {
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         motor1.setDirection(DcMotor.Direction.FORWARD);
         motor2.setDirection(DcMotor.Direction.FORWARD);
-        svet.setDirection(DcMotor.Direction.FORWARD);
-        svet1.setDirection(DcMotor.Direction.FORWARD);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -60,30 +50,6 @@ public class Program2  extends LinearOpMode {
                     square_angle = 1;
                 }
             }
-            boolean circle = gamepad1.circle;
-            if (count == 1){
-                n = n + 0.001;
-                if (n == 0.01){
-                    count = 0;
-                }
-            }
-            if (count == 0){
-                n = n - 0.001;
-                if (n == 0){
-                    count = 1;
-                }
-            }
-            svet.setPower(n);
-            svet1.setPower(n);
-            /*if (circle == true && circle_angle == 1) {
-                svet.setPower(1);
-                svet.setPower(0);
-                circle_angle = 0;
-            }
-            if (circle == false && circle_angle == 0) {
-                svet.setPower(0);
-                circle_angle = 1;
-            }*/
             boolean triangle = gamepad1.triangle;
             if (triangle == true) {
                 motor1.setPower(1);
@@ -115,9 +81,8 @@ public class Program2  extends LinearOpMode {
             leftBackDrive.setPower(leftBackPower);
             rightBackDrive.setPower(rightBackPower);
             oldsquare = square;
-            oldcircle = circle;
             oldtriangle = triangle;
-            }
-
         }
+
     }
+}

@@ -139,7 +139,10 @@ public class Lift {
             case AUTO:
                 double conus=0;
                 if(aiRRobot.graber.getPosition()){
-                    conus=150;
+                    aiRRobot.graber.servo1.setPosition(0.25);
+                }
+                else{
+                    aiRRobot.graber.servo1.setPosition(0);
                 }
                 double target1 = liftPosition.value+conus;
                 double target2 = liftPosition.value+conus;
