@@ -92,7 +92,7 @@ public class TeleOpM extends LinearOpMode {
             telemetry.addData("motor1", aiRRobot.lift.motor1.getCurrentPosition());
             telemetry.addData("motor2",aiRRobot.lift.motor2.getCurrentPosition());
             aiRRobot.lightning.update();
-
+              aiRRobot.driveTrain.displayEncoders();
             double axial = -gamepad1.left_stick_y * speed;
             double lateral = -gamepad1.left_stick_x * speed;
             double yaw = -gamepad1.right_stick_x * speed;

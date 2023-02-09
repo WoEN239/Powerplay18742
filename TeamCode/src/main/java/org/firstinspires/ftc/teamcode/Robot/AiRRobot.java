@@ -22,5 +22,6 @@ public class AiRRobot {
     public void allUpdate(){
         lift.update();
         lightning.update();
+        odometry.update();
     }
 }
