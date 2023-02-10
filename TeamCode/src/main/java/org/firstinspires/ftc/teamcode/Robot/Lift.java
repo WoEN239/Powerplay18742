@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode.Robot;
 
 import static java.lang.Math.abs;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
+@Config
 public class Lift {
     public DcMotor motor1;
     public DcMotor motor2;
@@ -54,9 +56,9 @@ public class Lift {
         return m0;
     }
     public enum LiftPosition {
-        ZERO(1), GROUND(100), LOW(580), MIDDLE(1140), UP(1230);
+        ZERO(1), GROUND(100), LOW(780), MIDDLE(1180), UP(1230);
 
-        private LiftPosition(int value) {
+        LiftPosition(int value) {
             this.value = value;
         }
 
@@ -122,10 +124,10 @@ public class Lift {
         double t;
         double tr=0;
 
-        while (!isAtPosition() && tr < 5 && aiRRobot.linearOpMode.opModeIsActive()) {
+        while (!isAtPosition() && tr < 3 && aiRRobot.linearOpMode.opModeIsActive()) {
             t=(double) System.currentTimeMillis() / 1000.0;
-            tr=t-t1;
-            liftMode=LiftMode.AUTO;
+            tr = t - t1;
+            liftMode = LiftMode.AUTO;
             update();
 
         }
@@ -134,23 +136,28 @@ public class Lift {
 
     }
 
+    public static double POS_UP = 0.72;
+    public static double POS_DOWN = 0.43;
+
     public void update() {
+        if (aiRRobot.graber.getPosition())
+            aiRRobot.graber.servo1.setPosition(POS_UP);
+        else
+            aiRRobot.graber.servo1.setPosition(POS_DOWN);
+
         switch (liftMode) {
+
             case AUTO:
-                double conus=0;
-                if(aiRRobot.graber.getPosition()){
-                    conus=150;
-                }
-                double target1 = liftPosition.value+conus;
-                double target2 = liftPosition.value+conus;
+                double target1 = liftPosition.value;
+                double target2 = liftPosition.value;
                 double l1 = motor1.getCurrentPosition();
                 double l2 = motor2.getCurrentPosition();
                 err1 = target1 - l1;
                 err2 = target2 - l2;
                 double poweryl1 = PIDZL1.update(err1);
                 double poweryl2 = PIDZL2.update(err2);
-                motor1.setPower(Range.clip(poweryl1,-0.1,0.6));
-                motor2.setPower(Range.clip(poweryl2,-0.1,0.6));
+                motor1.setPower(Range.clip(poweryl1, -0.1, 0.6));
+                motor2.setPower(Range.clip(poweryl2, -0.1, 0.6));
                 break;
             case MANUALLIMIT:
                 setPowersLimit(power);

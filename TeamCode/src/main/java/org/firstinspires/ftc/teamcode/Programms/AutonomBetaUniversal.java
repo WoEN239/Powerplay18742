@@ -17,7 +17,6 @@ public class AutonomBetaUniversal extends LinearOpMode {
         camera = new Camera(hardwareMap);
         aiRRobot.lift.reset();
         waitForStart();
-        aiRRobot.lift.setMotor(Lift.LiftPosition.LOW);
         int c = camera.readCamera();
         telemetry.addData("camera", c);
         telemetry.update();

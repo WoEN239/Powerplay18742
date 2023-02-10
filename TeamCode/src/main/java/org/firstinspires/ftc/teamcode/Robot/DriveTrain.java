@@ -119,14 +119,13 @@ public class DriveTrain {
         right_back_drive.setPower(rightRearMotorPower);
     }
 
-  /*  public void displayEncoders() {
-        opMode.telemetry.addData("lfd", left_front_drive.getCurrentPosition());
-        opMode.telemetry.addData("lrd", left_back_drive.getCurrentPosition());
-        opMode.telemetry.addData("rfd", right_front_drive.getCurrentPosition());
-        opMode.telemetry.addData("rrd", right_back_drive.getCurrentPosition());
+   public void displayEncoders() {
+        aiRRobot.linearOpMode.telemetry.addData("lfd", left_front_drive.getCurrentPosition());
+       aiRRobot.linearOpMode.telemetry.addData("lrd", left_back_drive.getCurrentPosition());
+       aiRRobot.linearOpMode.telemetry.addData("rfd", right_front_drive.getCurrentPosition());
+       aiRRobot.linearOpMode.telemetry.addData("rrd", right_back_drive.getCurrentPosition());
 
     }
-   */
 
 
     public void setMotor3axes(double x, double y, double z) {
@@ -242,8 +241,7 @@ public class DriveTrain {
 
             }
 
-            aiRRobot.odometry.update();
-
+            aiRRobot.allUpdate();
             double powerx = PIDFIELDX.update(errx);
             double powery = PIDFIELDY.update(erry);
             double powerz = PIDZ.update(errz);
@@ -252,7 +250,7 @@ public class DriveTrain {
                 powery = t/500*powery;
                 powerz = t=500*powerz;
             }
-            setPowersField(Range.clip(powerx, -0.8, 0.8), Range.clip(powery, -0.8, 0.8), Range.clip(powerz, -0.8, 0.8));
+            setPowersField(Range.clip(powerx, -0.55, 0.55), Range.clip(powery, -0.55, 0.55), Range.clip(powerz, -0.55, 0.55));
             told = t;
 
         }

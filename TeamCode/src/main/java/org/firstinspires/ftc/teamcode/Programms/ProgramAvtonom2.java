@@ -13,6 +13,8 @@ public class ProgramAvtonom2 extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
+    private DcMotor svet1 = null;
+    private DcMotor svet2 = null;
     double crr = 24 * 20 / (9.8 * PI);
     @Override
     public void runOpMode() {
@@ -24,6 +26,8 @@ public class ProgramAvtonom2 extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
+        svet1 = hardwareMap.get(DcMotor.class, "svet1");
+        svet2 = hardwareMap.get(DcMotor.class, "svet2");
 
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -41,8 +45,7 @@ public class ProgramAvtonom2 extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
-        TurnGuro(85, 0.15);
-        TurnGuro(-85, -0.15);
+        TurnGuro(85, 0.20);
     }
     void Turn(double x) {
         double lfd = leftFrontDrive.getCurrentPosition();
@@ -90,6 +93,8 @@ public class ProgramAvtonom2 extends LinearOpMode {
             rightFrontDrive.setPower(v);
             leftBackDrive.setPower(-v);
             rightBackDrive.setPower(v);
+            svet1.setPower(0);
+            svet1.setPower(0);
             angle = toDegrees(gyro.getAngularOrientation().firstAngle);
             telemetry.addData("angle", angle);
             telemetry.update();
