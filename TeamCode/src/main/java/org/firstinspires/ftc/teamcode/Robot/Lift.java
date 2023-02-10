@@ -5,6 +5,9 @@ import static java.lang.Math.abs;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DigitalChannelController;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 @Config
@@ -13,6 +16,8 @@ public class Lift {
     public DcMotor motor2;
     private PidRegulator PIDZL1 = new PidRegulator(0.8125 / 251.5, 0, 0);
     private PidRegulator PIDZL2 = new PidRegulator(0.8125 / 251.5, 0, 0);
+    public DigitalChannel buttonUp;
+    public DigitalChannel buttonDown;
     double told;
    double err1=0;
    double err2=0;
@@ -30,10 +35,14 @@ public class Lift {
         aiRRobot=robot;
         motor1 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("motor1");
         motor2 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("motor2");
-        motor1.setDirection(DcMotorSimple.Direction.FORWARD);
-        motor2.setDirection(DcMotorSimple.Direction.REVERSE);
+        buttonUp = aiRRobot.linearOpMode.hardwareMap.digitalChannel.get("top");
+        buttonDown = aiRRobot.linearOpMode.hardwareMap.digitalChannel.get("down");
+        motor1.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor2.setDirection(DcMotorSimple.Direction.FORWARD);
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        buttonUp.setMode(DigitalChannel.Mode.INPUT);
+        buttonDown.setMode(DigitalChannel.Mode.INPUT);
     }
 
     public void reset() {
@@ -45,6 +54,7 @@ public class Lift {
 
 
     public void setPowers(double x) {
+        aiRRobot.linearOpMode.telemetry.addData("powerrr", x);
         motor1.setPower(x);
         motor2.setPower(x);
     }
@@ -68,7 +78,7 @@ public class Lift {
     public void setPowersLimit(double x) {
         int pos1 = motor1.getCurrentPosition();
         int pos2 = motor2.getCurrentPosition();
-        if (x > 0) {
+        if (x > 0 && buttonUp.getState()==true) {
             if (pos1 > LiftPosition.UP.value) {
                 motor1.setPower(0);
             } else {
@@ -144,6 +154,7 @@ public class Lift {
             aiRRobot.graber.servo1.setPosition(POS_UP);
         else
             aiRRobot.graber.servo1.setPosition(POS_DOWN);
+        aiRRobot.linearOpMode.telemetry.addData("mode",liftMode);
 
         switch (liftMode) {
 

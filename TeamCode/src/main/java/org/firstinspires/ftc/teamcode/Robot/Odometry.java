@@ -57,7 +57,7 @@ public class Odometry {
 
         double deltaX = xPosition(lfd - lfdold, lbd - lbdold, rfd - rfdold, rbd - rbdold);
         double deltaY = yPosition(lfd - lfdold, lbd - lbdold, rfd - rfdold, rbd - rbdold);
-
+        deltaY= deltaY*0.75;
         x += deltaX * cos(toRadians(-angle)) + deltaY * sin(toRadians(-angle));
         y += -deltaX * sin(toRadians(-angle)) + deltaY * cos(toRadians(-angle));
         heading = angle;

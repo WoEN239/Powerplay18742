@@ -73,7 +73,7 @@ public class TeleOpM extends LinearOpMode {
                 aiRRobot.lift.liftMode = Lift.LiftMode.MANUALLIMIT;
             }
             if (triangle) {
-                aiRRobot.lift.power = 0.6;
+                aiRRobot.lift.power = 1.0;
             }
             if (cross) {
                 aiRRobot.lift.power = -0.1;
@@ -85,12 +85,13 @@ public class TeleOpM extends LinearOpMode {
             aiRRobot.lift.update();
 
 
-            aiRRobot.odometry.update();
-           telemetry.addData("x", aiRRobot.odometry.x);
+            telemetry.addData("x", aiRRobot.odometry.x);
             telemetry.addData("y", aiRRobot.odometry.y);
             telemetry.addData("heading", aiRRobot.odometry.heading);
             telemetry.addData("motor1", aiRRobot.lift.motor1.getCurrentPosition());
             telemetry.addData("motor2",aiRRobot.lift.motor2.getCurrentPosition());
+            telemetry.addData("top",aiRRobot.lift.buttonUp.getState());
+            telemetry.addData("down",aiRRobot.lift.buttonDown.getState());
             aiRRobot.lightning.update();
               aiRRobot.driveTrain.displayEncoders();
             double axial = -gamepad1.left_stick_y * speed;

@@ -245,10 +245,10 @@ public class DriveTrain {
             double powerx = PIDFIELDX.update(errx);
             double powery = PIDFIELDY.update(erry);
             double powerz = PIDZ.update(errz);
-            if (t < 0.5) {
-                powerx = t/500*powerx;
-                powery = t/500*powery;
-                powerz = t=500*powerz;
+            if (tr < 0.5) {
+                powerx = tr/500*powerx;
+                powery = tr/500*powery;
+                powerz = tr=500*powerz;
             }
             setPowersField(Range.clip(powerx, -0.55, 0.55), Range.clip(powery, -0.55, 0.55), Range.clip(powerz, -0.55, 0.55));
             told = t;
