@@ -14,39 +14,40 @@ public class AutonomVolodya extends LinearOpMode {
     @Override
     //инициализирующияся программа при запуске(это база)--------------------------------------------
     public void runOpMode() {
-        //
+        //объявляем моторы--------------------------------------------------------------------------
         leftFrontDrive = hardwareMap.get(DcMotor.class, "left_front_drive");
         leftBackDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
-
+        //задаём направление------------------------------------------------------------------------
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
-
+        //функция StopMotors------------------------------------------------------------------------
         StopMotors();
-
+        //последуйщий код будет выполнятся при нажатии на кнопку старт------------------------------
         waitForStart();
     }
-
+    //функция для остоновки моторов и сброса энкодеров----------------------------------------------
     void StopMotors(){
+        //стоп моторы-------------------------------------------------------------------------------
         leftFrontDrive.setPower(0);
         rightFrontDrive.setPower(0);
         leftBackDrive.setPower(0);
         rightBackDrive.setPower(0);
-
+        //обновить энкодеры-------------------------------------------------------------------------
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        //использовать энкодеры---------------------------------------------------------------------
         leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-
+    //функция для поворота робота-------------------------------------------------------------------
     void Turn(int target, double power) {
 
         double motors = 0;
