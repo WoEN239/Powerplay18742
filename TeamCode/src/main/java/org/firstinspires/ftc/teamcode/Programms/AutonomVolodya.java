@@ -6,6 +6,7 @@ package org.firstinspires.ftc.teamcode.Programms;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import static java.lang.Math.abs;
 
@@ -19,6 +20,9 @@ public class AutonomVolodya extends LinearOpMode {
     private DcMotor liftLeft = null;
     private DcMotor liftRight = null;
 
+    Servo servo;
+    Servo servo1;
+
     @Override
 
     //главная программа-----------------------------------------------------------------------------
@@ -31,6 +35,9 @@ public class AutonomVolodya extends LinearOpMode {
 
         liftLeft = hardwareMap.get(DcMotor.class, "motor1");
         liftRight = hardwareMap.get(DcMotor.class, "motor2");
+
+        servo = hardwareMap.get(Servo.class, "Servo");
+        servo1= hardwareMap.get(Servo.class, "Servo1");
 
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -381,6 +388,26 @@ public class AutonomVolodya extends LinearOpMode {
 
         StopMotors();
 
+    }
+
+    //закрыть захват---------------------------------------------------------------------------------
+    void CloseGraber(){
+        servo.setPosition(0.75);
+    }
+
+    //открытьзахват---------------------------------------------------------------------------------
+    void OpenGraber(){
+        servo.setPosition(1.00);
+    }
+
+    //Поднять дополнительный подъёмник--------------------------------------------------------------
+    void MiniLiftUP(){
+        servo.setPosition(0.75);
+    }
+
+    //пустить дополнительный подъёмник--------------------------------------------------------------
+    void MiniLiftDown(){
+        servo.setPosition(1.00);
     }
 
 }
