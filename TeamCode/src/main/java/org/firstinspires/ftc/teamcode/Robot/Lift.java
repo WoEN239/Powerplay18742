@@ -14,28 +14,31 @@ import com.qualcomm.robotcore.util.Range;
 public class Lift {
     public DcMotor motor1;
     public DcMotor motor2;
-    private PidRegulator PIDZL1 = new PidRegulator(0.8125 / 251.5, 0, 0);
-    private PidRegulator PIDZL2 = new PidRegulator(0.8125 / 251.5, 0, 0);
+    private PidRegulator PIDZL1 = new PidRegulator(1.5 / 251.5, 0, 0);
+    private PidRegulator PIDZL2 = new PidRegulator(1.5 / 251.5, 0, 0);
     public DigitalChannel buttonUp;
     public DigitalChannel buttonDown;
     double told;
-   double err1=0;
-   double err2 = 0;
+    double err1 = 0;
+    double err2 = 0;
     boolean pos = false;
     public double power = 0;
     public LiftPosition liftPosition = LiftPosition.ZERO;
     boolean circleold = false;
+
     public enum LiftMode {
         AUTO, MANUAl, MANUALLIMIT;
     }
 
     public LiftMode liftMode = LiftMode.AUTO;
     AiRRobot aiRRobot;
+
     public Lift(AiRRobot robot) {
-        aiRRobot=robot;
+        aiRRobot = robot;
+        aiRRobot.graber.servo1.setPosition(POS_DOWN);
         motor1 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("motor1");
         motor2 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("motor2");
-        buttonUp=aiRRobot.linearOpMode.hardwareMap.digitalChannel.get("top");
+        buttonUp = aiRRobot.linearOpMode.hardwareMap.digitalChannel.get("top");
         buttonDown = aiRRobot.linearOpMode.hardwareMap.digitalChannel.get("end");
         motor1.setDirection(DcMotorSimple.Direction.REVERSE);
         motor2.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -63,8 +66,9 @@ public class Lift {
         double m0 = (m1 + m2) / 2;
         return m0;
     }
+
     public enum LiftPosition {
-        ZERO(0), GROUND(100), LOW(780), MIDDLE(1180), UP(1230);
+        ZERO(0), GROUND(100), CUPSON(400), LOW(780), MIDDLE(1008), UP(1108);
 
         LiftPosition(int value) {
             this.value = value;
@@ -73,10 +77,21 @@ public class Lift {
         public int value;
     }
 
+    int liftOffset1 = 0;
+    int liftOffset2 = 0;
+
+    private int getPosition1() {
+        return motor1.getCurrentPosition() - liftOffset1;
+    }
+
+    private int getPosition2() {
+        return motor2.getCurrentPosition() - liftOffset2;
+    }
+
     public void setPowersLimit(double x) {
-        int pos1 = motor1.getCurrentPosition();
-        int pos2 = motor2.getCurrentPosition();
-        if (x > 0 && buttonUp.getState()==true) {
+        int pos1 = getPosition1();
+        int pos2 = getPosition2();
+        if (x > 0 && buttonUp.getState() == true) {
             if (pos1 > LiftPosition.UP.value) {
                 motor1.setPower(0);
             } else {
@@ -88,9 +103,7 @@ public class Lift {
             } else {
                 motor2.setPower(x);
             }
-        }
-        else
-        {
+        } else {
             if (pos1 < LiftPosition.ZERO.value) {
                 motor1.setPower(0);
             } else {
@@ -112,7 +125,7 @@ public class Lift {
 
     public void setMotor(LiftPosition position) {
         double z = 0;
-        liftPosition=position;
+        liftPosition = position;
         double hight = position.value;
 
         liftMode = LiftMode.AUTO;
@@ -130,10 +143,10 @@ public class Lift {
 
         double t1 = (double) System.currentTimeMillis() / 1000.0;
         double t;
-        double tr=0;
+        double tr = 0;
 
         while (!isAtPosition() && tr < 3 && aiRRobot.linearOpMode.opModeIsActive()) {
-            t=(double) System.currentTimeMillis() / 1000.0;
+            t = (double) System.currentTimeMillis() / 1000.0;
             tr = t - t1;
             liftMode = LiftMode.AUTO;
             update();
@@ -144,8 +157,8 @@ public class Lift {
 
     }
 
-    public static double POS_UP = 0.72;
-    public static double POS_DOWN = 0.43;
+    public static double POS_UP = 0.71;
+    public static double POS_DOWN = 0.32;
 
     public void update() {
 
@@ -157,21 +170,27 @@ public class Lift {
                     aiRRobot.graber.servo1.setPosition(POS_UP);
                 else
                     aiRRobot.graber.servo1.setPosition(POS_DOWN);
-                double target1 = liftPosition.value;
-                double target2 = liftPosition.value;
-                double l1 = motor1.getCurrentPosition();
-                double l2 = motor2.getCurrentPosition();
-                err1 = target1 - l1;
-                err2 = target2 - l2;
-                double poweryl1 = PIDZL1.update(err1);
-                double poweryl2 = PIDZL2.update(err2);
-                if(!buttonUp.getState() && (poweryl1 >0 && poweryl2 > 0)) {
-                    motor1.setPower(Range.clip(poweryl1, -0.1, 0));
-                    motor2.setPower(Range.clip(poweryl2, -0.1, 0));
-                }
-                else{
-                    motor1.setPower(Range.clip(poweryl1, -0.1, 0.6));
-                    motor2.setPower(Range.clip(poweryl2, -0.1, 0.6));
+                if (liftPosition == LiftPosition.UP) {
+                    if (buttonUp.getState()) {
+                        motor1.setPower(0.9);
+                        motor2.setPower(0.9);
+                    } else {
+                        motor1.setPower(0.1);
+                        motor2.setPower(0.1);
+                        liftOffset1 = motor1.getCurrentPosition() - LiftPosition.UP.value;
+                        liftOffset2 = motor2.getCurrentPosition() - LiftPosition.UP.value;
+                    }
+                } else {
+                    double target1 = liftPosition.value;
+                    double target2 = liftPosition.value;
+                    double l1 = getPosition1();
+                    double l2 = getPosition2();
+                    err1 = target1 - l1;
+                    err2 = target2 - l2;
+                    double poweryl1 = 0.1 + PIDZL1.update(err1);
+                    double poweryl2 = 0.1 + PIDZL2.update(err2);
+                    motor1.setPower(Range.clip(poweryl1, -0.1, 0.7));
+                    motor2.setPower(Range.clip(poweryl2, -0.1, 0.7));
                 }
                 break;
             case MANUALLIMIT:
@@ -182,7 +201,7 @@ public class Lift {
                 setPowersLimit(power);
                 break;
             case MANUAl:
-                circleold    = aiRRobot.linearOpMode.gamepad1.circle;
+                circleold = aiRRobot.linearOpMode.gamepad1.circle;
                 if (aiRRobot.linearOpMode.gamepad1.circle && !pos && !circleold) {
                     aiRRobot.graber.servo1.setPosition(POS_UP);
                     pos = !pos;
@@ -196,8 +215,9 @@ public class Lift {
                 break;
         }
     }
+
     public boolean isAtPosition() {
-        if(abs(err1)<5 && abs(err2)<5)
+        if (abs(err1) < 5 && abs(err2) < 5)
             return true;
         else
             return false;

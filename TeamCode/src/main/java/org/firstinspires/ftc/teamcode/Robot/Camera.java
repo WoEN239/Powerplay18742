@@ -71,6 +71,6 @@ public class Camera {
     }
 
     public void stopcamera() {
-        camera.closeCameraDevice();
+        camera.closeCameraDeviceAsync(() -> {});
     }
 }

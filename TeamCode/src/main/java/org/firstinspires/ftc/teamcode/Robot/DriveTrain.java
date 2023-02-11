@@ -227,9 +227,9 @@ public class DriveTrain {
         PIDZ.update(errz);
         double t1 = System.currentTimeMillis() / 1000.0;
         double t = 0;
-        double tr = t - told;
+        double tr = 0;
 
-        while (((abs(errx)) > 3 || (abs(erry)) > 3 || (abs(errz)) > 4) && tr < 5 && aiRRobot.linearOpMode.opModeIsActive()) {
+        while (((abs(errx)) > 2 || (abs(erry)) > 2 || (abs(errz)) > 3) && tr < 5 && aiRRobot.linearOpMode.opModeIsActive()) {
             t = System.currentTimeMillis() / 1000.0;
             tr = t - t1;
 
@@ -246,13 +246,13 @@ public class DriveTrain {
             double powery = PIDFIELDY.update(erry);
             double powerz = PIDZ.update(errz);
             if (tr < 0.5) {
-                powerx = tr/500*powerx;
-                powery = tr/500*powery;
-                powerz = tr=500*powerz;
+                powerx = tr/0.5*powerx;
+                powery = tr/0.5*powery;
+                powerz = tr/0.5*powerz;
             }
-            setPowersField(Range.clip(powerx, -0.55, 0.55), Range.clip(powery, -0.55, 0.55), Range.clip(powerz, -0.55, 0.55));
-            told = t;
-
+            setPowersField(Range.clip(powerx, -0.75, 0.75), Range.clip(powery, -0.75, 0.75), Range.clip(powerz, -0.55, 0.55));
+             aiRRobot.linearOpMode.telemetry.addData("t",tr);
+             aiRRobot.linearOpMode.telemetry.update();
         }
         left_front_drive.setPower(0);
         left_back_drive.setPower(0);

@@ -19,7 +19,7 @@ public class AutonoTest extends LinearOpMode {
        aiRRobot = new AiRRobot(this);
        aiRRobot.lift.reset();
         waitForStart();
-        aiRRobot.lift.setMotor(Lift.LiftPosition.MIDDLE);
+        aiRRobot.lift.setMotor(Lift.LiftPosition.UP);
         /*lift.reset();
         sleep(500);
         lift.setMotor(Lift.LiftPosition.UP);

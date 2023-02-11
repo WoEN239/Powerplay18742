@@ -15,22 +15,21 @@ Camera camera;
         aiRRobot = new AiRRobot(this);
         camera = new Camera(hardwareMap);
         waitForStart();
+        aiRRobot.lift.reset();
         int c = camera.readCamera();
         telemetry.addData("camera", c);
         telemetry.update();
         camera.stopcamera();
         aiRRobot.graber.Target_Graber(true);
-        aiRRobot.driveTrain.setFieldPosition(64, 1.4, 0);
-        aiRRobot.driveTrain.setFieldPosition(64, -5, 43);
-        aiRRobot.lift.setMotor(Lift.LiftPosition.MIDDLE);
-        aiRRobot.driveTrain.setFieldPosition(70, 1, 43);
         sleep(500);
+        aiRRobot.driveTrain.setFieldPosition(102,1.4,0);
+        aiRRobot.lift.setMotor(Lift.LiftPosition.UP);
+        aiRRobot.driveTrain.setFieldPosition(137.97, 22.2, 25.06);
         aiRRobot.graber.Target_Graber(false);
-        sleep(500);
-        aiRRobot.driveTrain.setFieldPosition(65, -5, 43);
-        aiRRobot.driveTrain.setFieldPosition(65, -5, 0);
         aiRRobot.lift.setMotor(Lift.LiftPosition.ZERO);
-
+        sleep(500);
+       // aiRRobot.lift.setMotor(Lift.LiftPosition.CUPSON);
+        //aiRRobot.driveTrain.setFieldPosition(156,-20,-90);
        /* for (int i=0;i<1;i++) {
             aiRRobot.driveTrain.setFieldPosition(124, 81, 90);
             aiRRobot.driveTrain.setFieldPosition(124, 91, 90);
@@ -43,20 +42,20 @@ Camera camera;
 
 */
 
-
         if (c == 18) {
-            aiRRobot.driveTrain.setFieldPosition(65, 0, -90);
-            aiRRobot.driveTrain.setFieldPosition(65, 55, -90);
-            aiRRobot.driveTrain.setFieldPosition(75, 55, -180);
+            aiRRobot.driveTrain.setFieldPosition(144, 0, -90);
+            aiRRobot.driveTrain.setFieldPosition(144, 55, -90);
+            aiRRobot.driveTrain.setFieldPosition(144, 55, -180);
         }
         if (c == 6) {
-            aiRRobot.driveTrain.setFieldPosition(65, 0, 90);
-            aiRRobot.driveTrain.setFieldPosition(65, -55, 90);
-            aiRRobot.driveTrain.setFieldPosition(75, -55, 180);
+            aiRRobot.driveTrain.setFieldPosition(144, 0, 90);
+            aiRRobot.driveTrain.setFieldPosition(144, -55, 90);
+            aiRRobot.driveTrain.setFieldPosition(144, -55, 180);
         }
         if (c == 0) {
-            aiRRobot.driveTrain.setFieldPosition(75, 0, 90);
+            aiRRobot.driveTrain.setFieldPosition(134, 0, 90);
         }
+
 
 
         //aiRRobot.driveTrain.setFieldPosition(124,-4,0);

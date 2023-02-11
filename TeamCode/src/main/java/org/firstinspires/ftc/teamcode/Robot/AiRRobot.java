@@ -14,8 +14,9 @@ public class AiRRobot {
     public AiRRobot(LinearOpMode linearOpMode1) {
         linearOpMode = linearOpMode1;
         driveTrain = new DriveTrain(this);
-        lift = new Lift(this);
         graber = new Graber(this);
+        lift = new Lift(this);
+
         lightning = new Lightning(this);
         odometry = new Odometry(this);
     }
