@@ -1,10 +1,12 @@
-//#################################################################################################
+//##################################################################################################
 //    v             o             l              o              d              y              a
-//#################################################################################################
+//##################################################################################################
 package org.firstinspires.ftc.teamcode.Programms;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 import static java.lang.Math.abs;
 
 public class AutonomVolodya extends LinearOpMode {
@@ -13,6 +15,9 @@ public class AutonomVolodya extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
+
+    private DcMotor liftLeft = null;
+    private DcMotor liftRight = null;
 
     @Override
 
@@ -24,10 +29,16 @@ public class AutonomVolodya extends LinearOpMode {
         rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
 
+        liftLeft = hardwareMap.get(DcMotor.class, "motor1");
+        liftRight = hardwareMap.get(DcMotor.class, "motor2");
+
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
+
+        liftLeft.setDirection(DcMotor.Direction.REVERSE);
+        liftRight.setDirection(DcMotor.Direction.FORWARD);
 
         StopMotors();
 
@@ -294,6 +305,76 @@ public class AutonomVolodya extends LinearOpMode {
             telemetry.addData("Сумма энкодоров с моторов:", motors);
             telemetry.addData("Цель:", target);
             telemetry.addData("Функция:", "Back");
+            telemetry.update();
+
+        }
+
+        StopMotors();
+
+    }
+
+    //лифт вверх------------------------------------------------------------------------------------
+    void LiftUp(int target, double power) {
+
+        double motors = 0;
+
+        while (motors > target) {
+
+            if(motors > target * 0.65){
+
+                power = power * 0.5;
+
+            }
+
+            double lr = liftRight.getCurrentPosition();
+            double ll = liftLeft.getCurrentPosition();
+
+            motors = (abs(lr + ll)) / 2;
+
+            liftRight.setPower(power);
+            liftLeft.setPower(power);
+
+            telemetry.addData("Левый мотор от лифта:", liftLeft);
+            telemetry.addData("Правый мотор от лифта:", liftRight);
+            telemetry.addData("Мощность двигателя:", power);
+            telemetry.addData("Сумма энкодоров с моторов:", motors);
+            telemetry.addData("Цель:", target);
+            telemetry.addData("Функция:", "LiftUp");
+            telemetry.update();
+
+        }
+
+        StopMotors();
+
+    }
+
+    //лифт вниз-------------------------------------------------------------------------------------
+    void LiftDown(int target, double power) {
+
+        double motors = 0;
+
+        while (motors > target) {
+
+            if(motors > target * 0.65){
+
+                power = power * 0.5;
+
+            }
+
+            double lr = liftRight.getCurrentPosition();
+            double ll = liftLeft.getCurrentPosition();
+
+            motors = (abs(lr + ll)) / 2;
+
+            liftRight.setPower(-power);
+            liftLeft.setPower(-power);
+
+            telemetry.addData("Левый мотор от лифта:", liftLeft);
+            telemetry.addData("Правый мотор от лифта:", liftRight);
+            telemetry.addData("Мощность двигателя:", power);
+            telemetry.addData("Сумма энкодоров с моторов:", motors);
+            telemetry.addData("Цель:", target);
+            telemetry.addData("Функция:", "LiftDown");
             telemetry.update();
 
         }
