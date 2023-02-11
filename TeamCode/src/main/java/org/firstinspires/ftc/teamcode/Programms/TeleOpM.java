@@ -32,6 +32,7 @@ public class TeleOpM extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
+        aiRRobot.lift.liftMode= Lift.LiftMode.MANUALLIMIT;
         aiRRobot.lightning.lightMode = Lightning.LightningMode.SMOOTH;
         aiRRobot.lift.liftPosition = Lift.LiftPosition.ZERO;
         while (opModeIsActive()) {
@@ -53,11 +54,11 @@ public class TeleOpM extends LinearOpMode {
                 aiRRobot.lift.liftPosition = Lift.LiftPosition.ZERO;
             }
 
-            /*if (gamepad1.dpad_up) {
+            if (gamepad1.dpad_up) {
                 aiRRobot.lift.liftMode = Lift.LiftMode.AUTO;
                 aiRRobot.lift.liftPosition = Lift.LiftPosition.UP;
             }
-            */
+
             if (gamepad1.dpad_left) {
                 aiRRobot.lift.liftMode = Lift.LiftMode.AUTO;
                 aiRRobot.lift.liftPosition = Lift.LiftPosition.LOW;

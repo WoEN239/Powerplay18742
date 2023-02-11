@@ -18,8 +18,8 @@ public class Graber {
         servo1 = aiRRobot.linearOpMode.hardwareMap.get(Servo.class, "Servo");
     }
 
-    public static double POS_CLOSE =1;
-    public static double POS_OPEN = 0.2;
+    public static double POS_CLOSE = 0.75;
+    public static double POS_OPEN = 1.00;
 
     public void Target_Graber(boolean triang) {
         if (pos != triang)
@@ -30,6 +30,7 @@ public class Graber {
             servo.setPosition(POS_OPEN);
         pos = triang;
     }
+
 
     public boolean getPosition() {
         if (System.currentTimeMillis() < timeGraber + 300)

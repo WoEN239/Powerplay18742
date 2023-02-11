@@ -20,11 +20,11 @@ public class Lift {
     public DigitalChannel buttonDown;
     double told;
    double err1=0;
-   double err2=0;
-
+   double err2 = 0;
+    boolean pos = false;
     public double power = 0;
     public LiftPosition liftPosition = LiftPosition.ZERO;
-
+    boolean circleold = false;
     public enum LiftMode {
         AUTO, MANUAl, MANUALLIMIT;
     }
@@ -35,8 +35,8 @@ public class Lift {
         aiRRobot=robot;
         motor1 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("motor1");
         motor2 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("motor2");
-        buttonUp = aiRRobot.linearOpMode.hardwareMap.digitalChannel.get("top");
-        buttonDown = aiRRobot.linearOpMode.hardwareMap.digitalChannel.get("down");
+        buttonUp=aiRRobot.linearOpMode.hardwareMap.digitalChannel.get("top");
+        buttonDown = aiRRobot.linearOpMode.hardwareMap.digitalChannel.get("end");
         motor1.setDirection(DcMotorSimple.Direction.REVERSE);
         motor2.setDirection(DcMotorSimple.Direction.FORWARD);
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -52,9 +52,7 @@ public class Lift {
         motor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-
     public void setPowers(double x) {
-        aiRRobot.linearOpMode.telemetry.addData("powerrr", x);
         motor1.setPower(x);
         motor2.setPower(x);
     }
@@ -66,7 +64,7 @@ public class Lift {
         return m0;
     }
     public enum LiftPosition {
-        ZERO(1), GROUND(100), LOW(780), MIDDLE(1180), UP(1230);
+        ZERO(0), GROUND(100), LOW(780), MIDDLE(1180), UP(1230);
 
         LiftPosition(int value) {
             this.value = value;
@@ -150,15 +148,15 @@ public class Lift {
     public static double POS_DOWN = 0.43;
 
     public void update() {
-        if (aiRRobot.graber.getPosition())
-            aiRRobot.graber.servo1.setPosition(POS_UP);
-        else
-            aiRRobot.graber.servo1.setPosition(POS_DOWN);
-        aiRRobot.linearOpMode.telemetry.addData("mode",liftMode);
+
 
         switch (liftMode) {
 
             case AUTO:
+                if (aiRRobot.graber.getPosition())
+                    aiRRobot.graber.servo1.setPosition(POS_UP);
+                else
+                    aiRRobot.graber.servo1.setPosition(POS_DOWN);
                 double target1 = liftPosition.value;
                 double target2 = liftPosition.value;
                 double l1 = motor1.getCurrentPosition();
@@ -167,13 +165,33 @@ public class Lift {
                 err2 = target2 - l2;
                 double poweryl1 = PIDZL1.update(err1);
                 double poweryl2 = PIDZL2.update(err2);
-                motor1.setPower(Range.clip(poweryl1, -0.1, 0.6));
-                motor2.setPower(Range.clip(poweryl2, -0.1, 0.6));
+                if(!buttonUp.getState() && (poweryl1 >0 && poweryl2 > 0)) {
+                    motor1.setPower(Range.clip(poweryl1, -0.1, 0));
+                    motor2.setPower(Range.clip(poweryl2, -0.1, 0));
+                }
+                else{
+                    motor1.setPower(Range.clip(poweryl1, -0.1, 0.6));
+                    motor2.setPower(Range.clip(poweryl2, -0.1, 0.6));
+                }
                 break;
             case MANUALLIMIT:
+                if (aiRRobot.graber.getPosition())
+                    aiRRobot.graber.servo1.setPosition(POS_UP);
+                else
+                    aiRRobot.graber.servo1.setPosition(POS_DOWN);
                 setPowersLimit(power);
                 break;
             case MANUAl:
+                circleold    = aiRRobot.linearOpMode.gamepad1.circle;
+                if (aiRRobot.linearOpMode.gamepad1.circle && !pos && !circleold) {
+                    aiRRobot.graber.servo1.setPosition(POS_UP);
+                    pos = !pos;
+                }
+                if (!aiRRobot.linearOpMode.gamepad1.circle && pos && circleold) {
+                    aiRRobot.graber.servo1.setPosition(POS_DOWN);
+                    pos = !pos;
+                }
+                circleold = aiRRobot.linearOpMode.gamepad1.circle;
                 setPowers(power);
                 break;
         }
