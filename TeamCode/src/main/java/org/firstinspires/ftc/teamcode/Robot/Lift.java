@@ -68,7 +68,7 @@ public class Lift {
     }
 
     public enum LiftPosition {
-        ZERO(0), GROUND(100), CUPSON(400), LOW(780), MIDDLE(1008), UP(1108);
+        ZERO(0), GROUND(100), CUPSON1(400), CUPSON2(370), LOW(780), MIDDLE(1008), UP(1108);
 
         LiftPosition(int value) {
             this.value = value;
