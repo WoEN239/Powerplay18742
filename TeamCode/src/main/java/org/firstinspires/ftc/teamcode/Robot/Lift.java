@@ -175,8 +175,8 @@ public class Lift {
                         motor1.setPower(0.9);
                         motor2.setPower(0.9);
                     } else {
-                        motor1.setPower(0.1);
-                        motor2.setPower(0.1);
+                        motor1.setPower(0.2);
+                        motor2.setPower(0.2);
                         liftOffset1 = motor1.getCurrentPosition() - LiftPosition.UP.value;
                         liftOffset2 = motor2.getCurrentPosition() - LiftPosition.UP.value;
                     }
