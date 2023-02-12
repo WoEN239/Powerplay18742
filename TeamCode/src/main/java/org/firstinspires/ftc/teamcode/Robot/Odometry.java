@@ -39,7 +39,6 @@ public class Odometry {
         right_front_drive = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("right_front_drive");
         right_back_drive = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("right_back_drive");
 
-
         left_front_drive.setDirection(DcMotor.Direction.FORWARD);
         left_back_drive.setDirection(DcMotor.Direction.FORWARD);
         right_front_drive.setDirection(DcMotor.Direction.REVERSE);

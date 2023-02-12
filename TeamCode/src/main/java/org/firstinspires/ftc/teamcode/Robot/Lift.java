@@ -172,8 +172,8 @@ public class Lift {
                     aiRRobot.graber.servo1.setPosition(POS_DOWN);
                 if (liftPosition == LiftPosition.UP) {
                     if (buttonUp.getState()) {
-                        motor1.setPower(0.9);
-                        motor2.setPower(0.9);
+                        motor1.setPower(1.0);
+                        motor2.setPower(1.0);
                     } else {
                         motor1.setPower(0.1);
                         motor2.setPower(0.1);
