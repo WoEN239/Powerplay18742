@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.Programms;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-
 import static java.lang.Math.abs;
 
 public class AutonomVolodyaTester extends LinearOpMode {
@@ -52,10 +51,16 @@ public class AutonomVolodyaTester extends LinearOpMode {
         rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        liftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        liftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        liftRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
 
@@ -83,8 +88,8 @@ public class AutonomVolodyaTester extends LinearOpMode {
             telemetry.addData("Правый задний мотор:", rbd);
             telemetry.addData("Сумма энкодоров с колёс:", motors1);
             telemetry.addData("Сумма энкодоров с лифта:", motors2);
-            telemetry.addData("Захват:", Servo);
-            telemetry.addData("Дополнительный подъёмник:", Servo1);
+            telemetry.addData("Позиция захвата:", Servo);
+            telemetry.addData("Позиция дополнительного подъёмника:", Servo1);
             telemetry.update();
 
         }
