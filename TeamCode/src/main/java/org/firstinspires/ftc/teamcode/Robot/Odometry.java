@@ -16,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 public class Odometry {
     BNO055IMU gyro;
 
-    double crr = 24 * 20 / (9.8 * PI);
+    double crr = 24 * 20 / (9.8 * PI)/(124/121.8);
 
     private DcMotor left_front_drive;
     private DcMotor left_back_drive;
@@ -56,7 +56,7 @@ public class Odometry {
 
         double deltaX = xPosition(lfd - lfdold, lbd - lbdold, rfd - rfdold, rbd - rbdold);
         double deltaY = yPosition(lfd - lfdold, lbd - lbdold, rfd - rfdold, rbd - rbdold);
-        deltaY= deltaY*0.75;
+        deltaY= deltaY*0.75*(62/53.8);
         x += deltaX * cos(toRadians(-angle)) + deltaY * sin(toRadians(-angle));
         y += -deltaX * sin(toRadians(-angle)) + deltaY * cos(toRadians(-angle));
         heading = angle;

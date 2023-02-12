@@ -68,7 +68,7 @@ public class Lift {
     }
 
     public enum LiftPosition {
-        ZERO(0), GROUND(100), CUPSON(400), LOW(780), MIDDLE(1008), UP(1108);
+        ZERO(0), GROUND(100), CUPSON1(400), CUPSON2(370), LOW(780), MIDDLE(1008), UP(1108);
 
         LiftPosition(int value) {
             this.value = value;
@@ -175,8 +175,8 @@ public class Lift {
                         motor1.setPower(1.0);
                         motor2.setPower(1.0);
                     } else {
-                        motor1.setPower(0.1);
-                        motor2.setPower(0.1);
+                        motor1.setPower(0.2);
+                        motor2.setPower(0.2);
                         liftOffset1 = motor1.getCurrentPosition() - LiftPosition.UP.value;
                         liftOffset2 = motor2.getCurrentPosition() - LiftPosition.UP.value;
                     }

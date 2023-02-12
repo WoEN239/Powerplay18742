@@ -31,7 +31,7 @@ public class DriveTrain {
     private PidRegulator PIDZ = new PidRegulator(kProtation, kIrotation, kDrotation);
     private PidRegulator PIDFIELDX = new PidRegulator(kPdrive, kIdrive, kDdrive);
     private PidRegulator PIDFIELDY = new PidRegulator(kPdrive, kIdrive, kDdrive);
-    public static double kPdrive = 0.05;
+    public static double kPdrive = 0.04;
     public static double kIdrive = 0.055;
     public static double kDdrive = 0;
     public static double kProtation = 0.04;
@@ -229,7 +229,7 @@ public class DriveTrain {
         double t = 0;
         double tr = 0;
 
-        while (((abs(errx)) > 2 || (abs(erry)) > 2 || (abs(errz)) > 3) && tr < 5 && aiRRobot.linearOpMode.opModeIsActive()) {
+        while (((abs(errx)) > 1.5 || (abs(erry)) > 1.5 || (abs(errz)) > 2) && tr < 5 && aiRRobot.linearOpMode.opModeIsActive()) {
             t = System.currentTimeMillis() / 1000.0;
             tr = t - t1;
 
