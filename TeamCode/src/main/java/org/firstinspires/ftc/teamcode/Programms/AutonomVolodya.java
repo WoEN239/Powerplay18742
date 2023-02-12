@@ -8,15 +8,17 @@
 ○ время
 ○ функциональность
 ○ роботоспособность
-также нужно будет добавить подсветку и параллельные задачи.*/
+А вот что нужно сделать в коде:
+○ проверить и настроить значения захвата
+○ проверить и настроить значения дополнительного подъёмника
+○ добавить павороты по градусам*/
+
 //-----------------------------------------CODE-----------------------------------------------------
 package org.firstinspires.ftc.teamcode.Programms;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-
 import static java.lang.Math.abs;
 
 public class AutonomVolodya extends LinearOpMode {
