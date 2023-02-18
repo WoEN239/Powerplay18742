@@ -22,8 +22,8 @@ public class PidRegulator {
         double time = System.currentTimeMillis() / 1000.0;
         double up = err * kP;
         ui += (err * kI) * (time - told);
-        if (abs(ui) > 1) {
-            ui = 1;
+        if (abs(ui) > 0.25) {
+            ui = 0.25;
         }
         double ud = (err - errold) * kD / (time - told);
         errold = err;

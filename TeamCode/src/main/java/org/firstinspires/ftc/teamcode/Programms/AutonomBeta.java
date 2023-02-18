@@ -25,9 +25,10 @@ public class AutonomBeta extends LinearOpMode {
         sleep(500);
         aiRRobot.driveTrain.setFieldPosition(102, 1.4, 0);
         aiRRobot.lift.setMotor(Lift.LiftPosition.UP);
-        aiRRobot.driveTrain.setFieldPosition(138.97, 21.2, 30.06);
+        aiRRobot.driveTrain.setFieldPosition(141.39, 21.9, 29.5);
         aiRRobot.graber.Target_Graber(false);
         sleep(500);
+        aiRRobot.driveTrain.setFieldPosition(136.39, 16.9, 29.5);
         aiRRobot.lift.setMotor(Lift.LiftPosition.ZERO);
         aiRRobot.driveTrain.setFieldPosition(130, 0, 0);
         /*aiRRobot.driveTrain.setFieldPosition(120, 1.4, 0);
@@ -54,7 +55,7 @@ public class AutonomBeta extends LinearOpMode {
          */
         if (c == 18) {
             aiRRobot.driveTrain.setFieldPosition(130, 0, -90);
-            aiRRobot.driveTrain.setFieldPosition(130, 65, -90);
+            aiRRobot.driveTrain.setFieldPosition(130, 62, -90);
 
         }
         if (c == 6) {
