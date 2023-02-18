@@ -16,10 +16,13 @@
 //-----------------------------------------CODE-----------------------------------------------------
 package org.firstinspires.ftc.teamcode.Programms;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import static java.lang.Math.abs;
+
+@Autonomous
 
 public class AutonomVolodya extends LinearOpMode {
 
@@ -61,9 +64,15 @@ public class AutonomVolodya extends LinearOpMode {
         StopMotors();
 
         waitForStart();
-        //функции-----------------------------------------------------------------------------------
 
-        Forward(3000, 1);
+        //функции-----------------------------------------------------------------------------------
+        Forward(1000, 1);
+        Back(1000, 1);
+        TurnLeft(1000, 1);
+        TurnRight(1000, 1);
+        Left(1000, 1);
+        Right(1000, 1);
+
     }
 
     //стоп моторы, сброс энкодера и использование энкодеров-----------------------------------------
@@ -91,7 +100,7 @@ public class AutonomVolodya extends LinearOpMode {
 
         double motors = 0;
 
-        while (motors > target) {
+        while (motors < target) {
 
             if(motors > target * 0.65){
 
@@ -132,7 +141,7 @@ public class AutonomVolodya extends LinearOpMode {
 
         double motors = 0;
 
-        while (motors > target) {
+        while (motors < target) {
 
             if(motors > target * 0.65){
 
@@ -173,7 +182,7 @@ public class AutonomVolodya extends LinearOpMode {
 
         double motors = 0;
 
-        while (motors > target) {
+        while (motors < target) {
 
             if(motors > target * 0.65){
 
@@ -214,7 +223,7 @@ public class AutonomVolodya extends LinearOpMode {
 
         double motors = 0;
 
-        while (motors > target) {
+        while (motors < target) {
 
             if(motors > target * 0.65){
 
@@ -255,7 +264,7 @@ public class AutonomVolodya extends LinearOpMode {
 
         double motors = 0;
 
-        while (motors > target) {
+        while (motors < target) {
 
             if(motors > target * 0.65){
 
@@ -287,7 +296,7 @@ public class AutonomVolodya extends LinearOpMode {
 
         }
 
-        StopMotors();
+        //StopMotors();
 
     }
 
@@ -296,7 +305,7 @@ public class AutonomVolodya extends LinearOpMode {
 
         double motors = 0;
 
-        while (motors > target) {
+        while (motors < target) {
 
             if(motors > target * 0.65){
 
@@ -337,7 +346,7 @@ public class AutonomVolodya extends LinearOpMode {
 
         double motors = 0;
 
-        while (motors > target) {
+        while (motors < target) {
 
             if(motors > target * 0.65){
 
@@ -372,7 +381,7 @@ public class AutonomVolodya extends LinearOpMode {
 
         double motors = 0;
 
-        while (motors > target) {
+        while (motors < target) {
 
             if(motors > target * 0.65){
 
