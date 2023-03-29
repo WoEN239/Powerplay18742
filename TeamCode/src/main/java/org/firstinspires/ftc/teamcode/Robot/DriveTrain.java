@@ -119,17 +119,25 @@ public class DriveTrain {
         right_back_drive.setPower(rightRearMotorPower);
     }
 
-   public void displayEncoders() {
+    public void displayEncoders() {
         aiRRobot.linearOpMode.telemetry.addData("lfd", left_front_drive.getCurrentPosition());
-       aiRRobot.linearOpMode.telemetry.addData("lrd", left_back_drive.getCurrentPosition());
-       aiRRobot.linearOpMode.telemetry.addData("rfd", right_front_drive.getCurrentPosition());
-       aiRRobot.linearOpMode.telemetry.addData("rrd", right_back_drive.getCurrentPosition());
+        aiRRobot.linearOpMode.telemetry.addData("lrd", left_back_drive.getCurrentPosition());
+        aiRRobot.linearOpMode.telemetry.addData("rfd", right_front_drive.getCurrentPosition());
+        aiRRobot.linearOpMode.telemetry.addData("rrd", right_back_drive.getCurrentPosition());
 
     }
 
+    double constantVelocityMotion(double start, double time, double speed, double finish) {
+        double dist = finish - start;
+        if (finish < speed * time  + start)
+             return finish;
+        if (start > finish)
+            return speed * time * (-1) + start;
+        else
+            return speed * time + start;
+    }
 
     public void setMotor3axes(double x, double y, double z) {
-        reset();
 
         double lfd = left_front_drive.getCurrentPosition();
         double lbd = left_back_drive.getCurrentPosition();
@@ -186,9 +194,9 @@ public class DriveTrain {
             double powerz = PIDZ.update(errz);
 
             if (t < 0.5) {
-                powerx = t/500*powerx;
-                powery = t/500*powery;
-                powerz = t=500*powerz;
+                powerx = t / 500 * powerx;
+                powery = t / 500 * powery;
+                powerz = t / 500 * powerz;
             }
             setPowers(Range.clip(powerx, -0.4, 0.4), powery, powerz);
             told = t;
@@ -246,13 +254,13 @@ public class DriveTrain {
             double powery = PIDFIELDY.update(erry);
             double powerz = PIDZ.update(errz);
             if (tr < 0.5) {
-                powerx = tr/0.5*powerx;
-                powery = tr/0.5*powery;
-                powerz = tr/0.5*powerz;
+                powerx = tr / 0.5 * powerx;
+                powery = tr / 0.5 * powery;
+                powerz = tr / 0.5 * powerz;
             }
             setPowersField(Range.clip(powerx, -0.75, 0.75), Range.clip(powery, -0.75, 0.75), Range.clip(powerz, -0.55, 0.55));
-             aiRRobot.linearOpMode.telemetry.addData("t",tr);
-             aiRRobot.linearOpMode.telemetry.update();
+            aiRRobot.linearOpMode.telemetry.addData("t", tr);
+            aiRRobot.linearOpMode.telemetry.update();
         }
         left_front_drive.setPower(0);
         left_back_drive.setPower(0);
