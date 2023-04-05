@@ -119,12 +119,102 @@ public class DriveTrain {
         right_back_drive.setPower(rightRearMotorPower);
     }
 
-   public void displayEncoders() {
+    public void displayEncoders() {
         aiRRobot.linearOpMode.telemetry.addData("lfd", left_front_drive.getCurrentPosition());
-       aiRRobot.linearOpMode.telemetry.addData("lrd", left_back_drive.getCurrentPosition());
-       aiRRobot.linearOpMode.telemetry.addData("rfd", right_front_drive.getCurrentPosition());
-       aiRRobot.linearOpMode.telemetry.addData("rrd", right_back_drive.getCurrentPosition());
+        aiRRobot.linearOpMode.telemetry.addData("lrd", left_back_drive.getCurrentPosition());
+        aiRRobot.linearOpMode.telemetry.addData("rfd", right_front_drive.getCurrentPosition());
+        aiRRobot.linearOpMode.telemetry.addData("rrd", right_back_drive.getCurrentPosition());
 
+    }
+
+    double constantVelocityMotion(double start, double time, double speed, double finish) {
+        double dist = finish - start;
+        if (finish < speed * time  + start)
+             return finish;
+        if (start > finish)
+            return speed * time * (-1) + start;
+        else
+            return speed * time + start;
+    }
+
+    public void setMotor3axes(double x, double y, double z) {
+
+        double lfd = left_front_drive.getCurrentPosition();
+        double lbd = left_back_drive.getCurrentPosition();
+        double rfd = right_front_drive.getCurrentPosition();
+        double rbd = right_back_drive.getCurrentPosition();
+
+        double motorsX = (lfd + lbd + rfd + rbd) / 4;
+        double motorsY = (-lfd + lbd + rfd - rbd) / 4;
+
+        double targetx = x * crr;
+        double targety = y * crr;
+        double errx = targetx - motorsX;
+        double erry = targety - motorsY;
+        targetangle = targetangle + z;
+        double errz = targetangle - gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+
+        while (abs(errz) > 180) {
+            errz -= 360 * signum(errz);
+
+        }
+        PIDX.update(errx);
+        PIDY.update(erry);
+        PIDZ.update(errz);
+        double t1 = System.currentTimeMillis() / 1000.0;
+        double t = 0;
+        double tr = t - told;
+
+        while (((abs(errx)) > 75 || (abs(erry)) > 75 || (abs(errz)) > 4) && tr < 5 && aiRRobot.linearOpMode.opModeIsActive()) {
+            t = System.currentTimeMillis() / 1000.0;
+            tr = t - t1;
+            lfd = left_front_drive.getCurrentPosition();
+            lbd = left_back_drive.getCurrentPosition();
+            rfd = right_front_drive.getCurrentPosition();
+            rbd = right_back_drive.getCurrentPosition();
+
+
+            double angle = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+            motorsX = (lfd + lbd + rfd + rbd) / 4;
+            motorsY = (-lfd + lbd + rfd - rbd) / 4;
+            //motorsZ = (-lfd - lbd + rfd + rbd) / 4;
+            targetx = x * crr;
+            targety = y * crr;
+            errx = targetx - motorsX;
+            erry = targety - motorsY;
+            errz = targetangle - angle;
+            while (abs(errz) > 180) {
+                errz -= 360 * signum(errz);
+
+            }
+
+
+            double powerx = PIDX.update(errx);
+            double powery = PIDY.update(erry);
+            double powerz = PIDZ.update(errz);
+
+            if (t < 0.5) {
+                powerx = t / 500 * powerx;
+                powery = t / 500 * powery;
+                powerz = t / 500 * powerz;
+            }
+            setPowers(Range.clip(powerx, -0.4, 0.4), powery, powerz);
+            told = t;
+
+        }
+        left_front_drive.setPower(0);
+        left_back_drive.setPower(0);
+        right_front_drive.setPower(0);
+        right_back_drive.setPower(0);
+
+        left_front_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        left_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        left_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        left_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        right_front_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        right_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void setFieldPosition(double x, double y, double heading) {
@@ -164,13 +254,13 @@ public class DriveTrain {
             double powery = PIDFIELDY.update(erry);
             double powerz = PIDZ.update(errz);
             if (tr < 0.5) {
-                powerx = tr/0.5*powerx;
-                powery = tr/0.5*powery;
-                powerz = tr/0.5*powerz;
+                powerx = tr / 0.5 * powerx;
+                powery = tr / 0.5 * powery;
+                powerz = tr / 0.5 * powerz;
             }
             setPowersField(Range.clip(powerx, -0.75, 0.75), Range.clip(powery, -0.75, 0.75), Range.clip(powerz, -0.55, 0.55));
-             aiRRobot.linearOpMode.telemetry.addData("t",tr);
-             aiRRobot.linearOpMode.telemetry.update();
+            aiRRobot.linearOpMode.telemetry.addData("t", tr);
+            aiRRobot.linearOpMode.telemetry.update();
         }
         left_front_drive.setPower(0);
         left_back_drive.setPower(0);
