@@ -13,7 +13,8 @@ public class Lightning {
     }
 
     public LightningMode lightMode = LightningMode.OFF;
-AiRRobot aiRRobot;
+    AiRRobot aiRRobot;
+
     public Lightning(AiRRobot robot) {
         aiRRobot=robot;
         svet1 = aiRRobot.linearOpMode.hardwareMap.dcMotor.get("svet1");

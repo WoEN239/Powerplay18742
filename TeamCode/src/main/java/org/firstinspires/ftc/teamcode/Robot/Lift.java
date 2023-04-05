@@ -173,8 +173,10 @@ public class Lift {
                         motor1.setPower(1.0);
                         motor2.setPower(1.0);
                     } else {
-                        motor1.setPower(0.2);
-                        motor2.setPower(0.2);
+                        err1 = err2 = 0;
+
+                        motor1.setPower(0.3);
+                        motor2.setPower(0.3);
                         liftOffset1 = motor1.getCurrentPosition() - LiftPosition.UP.value;
                         liftOffset2 = motor2.getCurrentPosition() - LiftPosition.UP.value;
                     }
@@ -185,9 +187,9 @@ public class Lift {
                     double l2 = getPosition2();
                     err1 = target1 - l1;
                     err2 = target2 - l2;
-                    double poweryl1 = 0.1 + PIDZL1.update(err1);
-                    double poweryl2 = 0.1 + PIDZL2.update(err2);
-                    motor1.setPower(Range.clip(poweryl1, -0.1, 0.7));
+                    double poweryl1 = 0.2 + PIDZL1.update(err1);
+                    double poweryl2 = 0.2 + PIDZL2.update(err2);
+                    motor1.setPower(Range.clip(poweryl1, -0.1   , 0.7));
                     motor2.setPower(Range.clip(poweryl2, -0.1, 0.7));
                 }
                 break;

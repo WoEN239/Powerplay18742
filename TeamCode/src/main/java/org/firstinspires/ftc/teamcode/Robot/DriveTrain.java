@@ -98,7 +98,7 @@ public class DriveTrain {
     }
 
     public void setPowers(double x, double y, double z) {
-        y *= 1.2;
+        y *= 1.5;
         double leftFrontMotorPower = x - y - z;
         double rightFrontMotorPower = x + y + z;
         double leftRearMotorPower = x + y - z;
@@ -127,88 +127,6 @@ public class DriveTrain {
 
     }
 
-
-    public void setMotor3axes(double x, double y, double z) {
-        reset();
-
-        double lfd = left_front_drive.getCurrentPosition();
-        double lbd = left_back_drive.getCurrentPosition();
-        double rfd = right_front_drive.getCurrentPosition();
-        double rbd = right_back_drive.getCurrentPosition();
-
-        double motorsX = (lfd + lbd + rfd + rbd) / 4;
-        double motorsY = (-lfd + lbd + rfd - rbd) / 4;
-
-        double targetx = x * crr;
-        double targety = y * crr;
-        double errx = targetx - motorsX;
-        double erry = targety - motorsY;
-        targetangle = targetangle + z;
-        double errz = targetangle - gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
-
-        while (abs(errz) > 180) {
-            errz -= 360 * signum(errz);
-
-        }
-        PIDX.update(errx);
-        PIDY.update(erry);
-        PIDZ.update(errz);
-        double t1 = System.currentTimeMillis() / 1000.0;
-        double t = 0;
-        double tr = t - told;
-
-        while (((abs(errx)) > 75 || (abs(erry)) > 75 || (abs(errz)) > 4) && tr < 5 && aiRRobot.linearOpMode.opModeIsActive()) {
-            t = System.currentTimeMillis() / 1000.0;
-            tr = t - t1;
-            lfd = left_front_drive.getCurrentPosition();
-            lbd = left_back_drive.getCurrentPosition();
-            rfd = right_front_drive.getCurrentPosition();
-            rbd = right_back_drive.getCurrentPosition();
-
-
-            double angle = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
-            motorsX = (lfd + lbd + rfd + rbd) / 4;
-            motorsY = (-lfd + lbd + rfd - rbd) / 4;
-            //motorsZ = (-lfd - lbd + rfd + rbd) / 4;
-            targetx = x * crr;
-            targety = y * crr;
-            errx = targetx - motorsX;
-            erry = targety - motorsY;
-            errz = targetangle - angle;
-            while (abs(errz) > 180) {
-                errz -= 360 * signum(errz);
-
-            }
-
-
-            double powerx = PIDX.update(errx);
-            double powery = PIDY.update(erry);
-            double powerz = PIDZ.update(errz);
-
-            if (t < 0.5) {
-                powerx = t/500*powerx;
-                powery = t/500*powery;
-                powerz = t=500*powerz;
-            }
-            setPowers(Range.clip(powerx, -0.4, 0.4), powery, powerz);
-            told = t;
-
-        }
-        left_front_drive.setPower(0);
-        left_back_drive.setPower(0);
-        right_front_drive.setPower(0);
-        right_back_drive.setPower(0);
-
-        left_front_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        left_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        left_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        left_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        right_front_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right_front_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        right_back_drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right_back_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
     public void setFieldPosition(double x, double y, double heading) {
         PIDFIELDX.reset();
         PIDFIELDY.reset();
@@ -229,7 +147,7 @@ public class DriveTrain {
         double t = 0;
         double tr = 0;
 
-        while (((abs(errx)) > 2.0 || (abs(erry)) > 2.0 || (abs(errz)) > 2.0) && tr < 5 && aiRRobot.linearOpMode.opModeIsActive()) {
+        while (((abs(errx)) > 3.0 || (abs(erry)) > 3.0 || (abs(errz)) > 2.0) && tr < 5 && aiRRobot.linearOpMode.opModeIsActive()) {
             t = System.currentTimeMillis() / 1000.0;
             tr = t - t1;
 
